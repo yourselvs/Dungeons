@@ -1,0 +1,33 @@
+main: yourselvs.dungeontracker.Dungeons
+name: Dungeons
+version: 1.0
+author: yourselvs
+description: A dungeon manager to allow servers to have timed dungeon courses.
+commands:
+    dungeon:
+        description: Access to DungeonTracker commands.
+        usage: /<command> ?
+        aliases: [dgn, dt, dungeontracker]
+permissions:
+    dungeon:
+        default: true
+    dungeon.info:
+        default: true
+    dungeon.join:
+        default: true
+    dungeon.forcejoin:
+        default: op
+    dungeon.list:
+        default: true
+    dungeon.leaders:
+        default: true
+    dungeon.history:
+        default: op
+    dungeon.record:
+        default: true
+    dungeon.create:
+        default: op
+    dungeon.param:
+        default: op
+    dungeon.command:
+        default: op

@@ -1,0 +1,24 @@
+parameters:
+    canPickupItem:
+        default: false
+    canManipulateArmorStand:
+        default: false
+    canEnterBed:
+        default: false
+    canUseBucket:
+        default: false
+    canDropItem:
+        default: false
+    canChangeExperience:
+        default: false
+    canFly:
+        default: false
+    canSneak: 
+        default: true
+    canSprint:
+        default: true
+commandsAllowedDefault:
+    - /dungeon leave
+    - /suicide
+useLeaderboardFunction: false
+    
