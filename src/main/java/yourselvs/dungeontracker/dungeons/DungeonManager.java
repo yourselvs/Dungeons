@@ -49,23 +49,6 @@ public class DungeonManager {
 	 */
 	public List<Dungeon> getDungeons() {return dungeons;}
 	
-	public List<Dungeon> getDungeons(Difficulty difficulty){
-		return null;
-	}
-	
-	/**
-	 * Attempts to find and return the specified dungeon.
-	 * @param name	The name of the dungeon to search for.
-	 * @return		The dungeon that was searched for. Returns null if dungeon is not found.
-	 */
-	public Dungeon getDungeon(String name){
-		for(Dungeon dungeon : dungeons)
-			if(dungeon.getName().equalsIgnoreCase(name))
-				return dungeon;
-		// TODO expception if the dungeon is not found
-		return null;
-	}
-	
 	/**
 	 * Adds a dungeon to the plugin.
 	 * @param dungeon	The dungeon that is added.
