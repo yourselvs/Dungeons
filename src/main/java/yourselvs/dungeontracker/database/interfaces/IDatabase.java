@@ -9,11 +9,11 @@ import yourselvs.dungeontracker.sessions.Session;
 
 public interface IDatabase {
 	public List<Dungeon> getDungeons();
-	public Dungeon removeDungeon(String dungeon);
+	public void removeDungeon(String dungeon);
 	public void addDungeon(Dungeon dungeon);
 	
 	public List<Session> getSessions();
-	public Session removeSession(UUID uuid);
+	public void removeSession(UUID uuid);
 	public void addSession(Session session);
 	
 	public List<Record> getRecords();

@@ -8,6 +8,8 @@ public class DateFormatter {
 	
 	/**
 	 * Formats date and time to readable strings.
+	 * 
+	 * @author yourselvs
 	 */
 	public DateFormatter(){
 		longFormat = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss.SS");

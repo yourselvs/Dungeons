@@ -1,6 +1,8 @@
 package yourselvs.dungeontracker.records;
 
 import java.util.List;
+import java.util.UUID;
+
 import yourselvs.dungeontracker.Dungeons;
 
 public class RecordManager {
@@ -28,6 +30,24 @@ public class RecordManager {
 	public void addRecord(Record record){
 		records.add(record);
 		plugin.getDB().addRecord(record);
+	}
+	
+	public void removeRecord(UUID player){
+		for(int i = 0; i < records.size(); i++){
+			if(records.get(i).getPlayer() == player){
+				records.remove(i);
+				i--;
+			}
+		}
+	}
+	
+	public void removeRecord(String dungeon){
+		for(int i = 0; i < records.size(); i++){
+			if(records.get(i).getDungeon().getName().equalsIgnoreCase(dungeon)){
+				records.remove(i);
+				i--;
+			}
+		}
 	}
 	
 	/**

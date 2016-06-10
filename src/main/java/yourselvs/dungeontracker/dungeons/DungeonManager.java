@@ -1,13 +1,16 @@
 package yourselvs.dungeontracker.dungeons;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 
 import yourselvs.dungeontracker.Dungeons;
 import yourselvs.dungeontracker.dungeons.Dungeon.Difficulty;
+import yourselvs.dungeontracker.sessions.Session;
+import yourselvs.dungeontracker.utils.ConfigManager.ConfigFile;
 
 public class DungeonManager {
 	private Dungeons plugin;
@@ -31,7 +34,7 @@ public class DungeonManager {
 	public DungeonManager(Dungeons instance){
 		this.plugin = instance;
 		
-		FileConfiguration cfg = plugin.getConfig();
+		FileConfiguration cfg = plugin.getConfigManager().getConfig(ConfigFile.CONFIG);
 		
 		canPickupItemDefault = cfg.getBoolean("parameters.canPickupItem.default");
 		canManipulateArmorStandDefault = cfg.getBoolean("parameters.canManipulateArmorStand.default");
@@ -66,9 +69,11 @@ public class DungeonManager {
 		boolean found = false;
 		for(int i = 0; i < dungeons.size(); i++)
 			if(dungeons.get(i).getName().equalsIgnoreCase(dungeon)){
+				plugin.getSessionManager().removeSession(dungeon);
 				dungeons.remove(i);
 				plugin.getDB().removeDungeon(dungeon);
 				found = true;
+				break;
 			}
 		return found;
 	}
@@ -90,7 +95,7 @@ public class DungeonManager {
 	 * @param difficulty		The difficulty of the dungeon.
 	 * @param timesCompleted	The number of times the dungeon has been completed.
 	 */
-	public Dungeon buildDungeon(String name, Location start, List<Item> reward, String creator, Difficulty difficulty, int timesCompleted){
+	public Dungeon buildDungeon(String name, Location start, List<ItemStack> reward, String creator, Difficulty difficulty, int timesCompleted){
 		Dungeon dungeon = new Dungeon(name, start, reward, creator, difficulty, timesCompleted);
 		
 		dungeon.canPickupItem = canPickupItemDefault;
@@ -103,6 +108,14 @@ public class DungeonManager {
 		dungeon.canSneak = canSneakDefault;
 		dungeon.canSprint = canSprintDefault;
 		
+		return dungeon;
+	}
+	
+	public Dungeon getDungeon(String name){
+		Dungeon dungeon = null;
+		for(Dungeon dgn : dungeons)
+			if(dgn.getName().equalsIgnoreCase(name))
+				dungeon = dgn;
 		return dungeon;
 	}
 	

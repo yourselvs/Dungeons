@@ -1,5 +1,6 @@
 package yourselvs.dungeontracker.sessions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,18 +35,43 @@ public class SessionManager {
 	
 	/**
 	 * Removes a session from server memory.
-	 * @param player
+	 * @param player	The UUID of the player to search for.
 	 */
-	public Session removeSession(UUID player) {
-		Session session = null;
+	public void removeSession(UUID player) {
 		for(int i = 0; i < sessions.size(); i++)
 			if(sessions.get(i).getPlayer() == player){
-				session = sessions.remove(i);
+				sessions.remove(i);
 				plugin.getDB().removeSession(player);
 				break;
 			}
-		return session;
 	}
+	
+	/**
+	 * Removes all sessions pretaining to a certain dungeon from memory.
+	 * @param dungeon	The name of the dungeon to search for.
+	 */
+	public void removeSession(String dungeon) {
+		for(int i = 0; i < sessions.size(); i++)
+			if(sessions.get(i).getDungeon().getName().equalsIgnoreCase(dungeon)){
+				plugin.getDB().removeSession(sessions.get(i).getPlayer());
+				sessions.remove(i);	
+				i--;
+			}
+	}
+	
+	/**
+	 * Finds all sessions in a dungeon.
+	 * @param dungeon	The name of the dungeon to search for.
+	 * @return			the sessions found.
+	 */
+	public List<Session> getSessions(String dungeon){
+		List<Session> foundSessions = new ArrayList<Session>();
+		for(Session session : sessions)
+			if(session.getDungeon().getName().equalsIgnoreCase(dungeon))
+				foundSessions.add(session);
+		return foundSessions;
+	}
+
 	
 	/**
 	 * Loads all sessions from the database into the plugin.
