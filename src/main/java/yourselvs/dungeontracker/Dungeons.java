@@ -16,6 +16,8 @@ import yourselvs.dungeontracker.utils.ConfigManager.ConfigFile;
 
 public class Dungeons extends JavaPlugin
 {	
+	public String version = "2.0.0-11";
+	
 	private IMongo mongo;
 	private IDatabase db;
 	private DateFormatter formatter;
