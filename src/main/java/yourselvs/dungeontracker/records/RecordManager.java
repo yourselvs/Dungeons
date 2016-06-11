@@ -1,5 +1,6 @@
 package yourselvs.dungeontracker.records;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,36 @@ public class RecordManager {
 	 * @return	The list of all records in memory.
 	 */
 	public List<Record> getRecords() {return records;}
+	
+	/**
+	 * Searches for records from a specific dungeon.
+	 * @param dungeon	The name of the dungeon to search for.
+	 * @return			The list of records found.
+	 */
+	public List<Record> getRecords(String dungeon) {
+		List<Record> records = new ArrayList<Record>();
+		
+		for(Record record : this.records)
+			if(record.getDungeon().getName().equalsIgnoreCase(dungeon))
+				records.add(record);
+		
+		return records;
+	}
+	
+	
+	/**
+	 * Searches for records from a specific player.
+	 * @param uuid	The UUID of the player to search for.
+	 * @return		The list of records found.
+	 */
+	public List<Record> getRecords(UUID uuid) {
+		List<Record> records = new ArrayList<Record>();
+		
+		for(Record record : this.records)
+			if(record.getPlayer().compareTo(uuid) == 0)
+				records.add(record);
+		return records;
+	}
 	
 	/**
 	 * Adds a record to server memory and database.
