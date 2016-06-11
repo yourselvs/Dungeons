@@ -1,6 +1,5 @@
 package yourselvs.dungeontracker.dungeons;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -9,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import yourselvs.dungeontracker.Dungeons;
 import yourselvs.dungeontracker.dungeons.Dungeon.Difficulty;
-import yourselvs.dungeontracker.sessions.Session;
 import yourselvs.dungeontracker.utils.ConfigManager.ConfigFile;
 
 public class DungeonManager {

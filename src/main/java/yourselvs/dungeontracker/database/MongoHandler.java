@@ -32,8 +32,6 @@ public class MongoHandler implements IDatabase {
 		v = new MongoVars();
 	}
 	
-	// TODO Build mongo handler
-	
 	@Override
 	public List<Dungeon> getDungeons() {
 		List<Dungeon> dungeons = new ArrayList<Dungeon>();
@@ -139,11 +137,31 @@ public class MongoHandler implements IDatabase {
 
 	@Override
 	public List<Record> getRecords() {
-		return null;
+		List<Record> records = new ArrayList<Record>();
+		Document docsToFind = new Document(v.type, v.recordType);
+		List<Document> docs = db.findDocuments(docsToFind);
+		for(Document doc : docs){
+			long leastSigBits = doc.getLong(v.leastSignificantBits);
+			long mostSigBits = doc.getLong(v.mostSignificantBits);
+			UUID uuid = new UUID(mostSigBits, leastSigBits);
+			Dungeon dungeon = plugin.getDungeonManager().getDungeon(doc.getString(v.dungeon));
+			Date finishTime = new Date(doc.getLong(v.finishTime));
+			Date completionTime = new Date(doc.getLong(v.completionTime));
+			
+			records.add(new Record(uuid, dungeon, finishTime, completionTime));
+		}
+		return records;
 	}
 
 	@Override
 	public void addRecord(Record record) {
+		Document doc = new Document(v.type, v.recordType)
+				.append(v.leastSignificantBits, record.getPlayer().getLeastSignificantBits())
+				.append(v.mostSignificantBits, record.getPlayer().getMostSignificantBits())
+				.append(v.dungeon, record.getDungeon().getName())
+				.append(v.finishTime, record.getFinishTime().getTime())
+				.append(v.completionTime, record.getCompletionTime().getTime());
+		db.insertDocument(doc);
 	}
 	
 	private Location buildLocation(Document doc){
