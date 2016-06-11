@@ -8,6 +8,7 @@ import yourselvs.dungeontracker.database.MongoHandler;
 import yourselvs.dungeontracker.database.interfaces.IDatabase;
 import yourselvs.dungeontracker.database.interfaces.IMongo;
 import yourselvs.dungeontracker.dungeons.DungeonManager;
+import yourselvs.dungeontracker.permissions.PermissionsManager;
 import yourselvs.dungeontracker.records.RecordManager;
 import yourselvs.dungeontracker.sessions.SessionManager;
 import yourselvs.dungeontracker.utils.ConfigManager;
@@ -16,7 +17,7 @@ import yourselvs.dungeontracker.utils.ConfigManager.ConfigFile;
 
 public class Dungeons extends JavaPlugin
 {	
-	public String version = "2.0.0-11";
+	public String version = "2.0";
 	
 	private IMongo mongo;
 	private IDatabase db;
@@ -26,6 +27,7 @@ public class Dungeons extends JavaPlugin
 	private RecordManager recordManager;
 	private CommandParser commandParser;
 	private ConfigManager configManager;
+	private PermissionsManager permissions;
     
     @Override
 	public void onEnable() {
@@ -36,11 +38,13 @@ public class Dungeons extends JavaPlugin
     	sessionManager = new SessionManager(this);
     	recordManager = new RecordManager(this);
     	configManager = new ConfigManager(this);
+    	permissions = new PermissionsManager(this);
     	
     	dungeonManager.loadDungeons();    	
     	sessionManager.loadSessions();
     	recordManager.loadRecords();
     	configManager.loadConfigs();
+    	permissions.loadPermissions();
     	
     	getCommand("dungeon").setExecutor(commandParser);
     	getCommand("dgn").setExecutor(commandParser);
