@@ -28,15 +28,6 @@ public class PermissionsManager {
 		permissions.add(new Permission("dungeon.command")); // view/change a commmand value of a dungeon
 	}
 	
-	public void loadPermissions(){
-		if(!loaded){			
-			for(Permission permission : permissions)
-				pluginManager.addPermission(permission);
-			
-			loaded = true;
-		}
-	}
-	
 	public List<Permission> getPermissions(){return permissions;}
 	
 	public void addPermission(Permission permission){
@@ -48,5 +39,14 @@ public class PermissionsManager {
 		Permission permission = new Permission(permissionStr);
 		permissions.add(permission);
 		pluginManager.addPermission(permission);
+	}
+	
+	public void loadPermissions(){
+		if(!loaded){			
+			for(Permission permission : permissions)
+				pluginManager.addPermission(permission);
+			
+			loaded = true;
+		}
 	}
 }
