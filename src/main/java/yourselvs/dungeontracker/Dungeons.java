@@ -13,7 +13,6 @@ import yourselvs.dungeontracker.records.RecordManager;
 import yourselvs.dungeontracker.sessions.SessionManager;
 import yourselvs.dungeontracker.utils.ConfigManager;
 import yourselvs.dungeontracker.utils.DateFormatter;
-import yourselvs.dungeontracker.utils.ConfigManager.ConfigFile;
 
 public class Dungeons extends JavaPlugin
 {	
