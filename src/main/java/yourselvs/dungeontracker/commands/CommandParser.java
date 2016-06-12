@@ -3,15 +3,17 @@ package yourselvs.dungeontracker.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import yourselvs.commands.DungeonCommand;
 import yourselvs.dungeontracker.Dungeons;
 
 public class CommandParser implements CommandExecutor{
 	private Dungeons plugin;
+	private Messenger messenger;
 	
 	public CommandParser(Dungeons instance){
 		this.plugin = instance;
+		this.messenger = new Messenger(instance);
 	}
 	
 	@Override
@@ -128,6 +130,14 @@ public class CommandParser implements CommandExecutor{
 	}
 	
 	private void processCommandNotFound(Cmd command){
+		String subcmd = command.args[0];
+		if(command.sender instanceof Player){
+			Player player = (Player) command.sender;
+			messenger.commandNotFound(player, subcmd);
+		}
+		else
+			messenger.commandNotFound(command.sender, subcmd);
+			
 		
 	}
 	
