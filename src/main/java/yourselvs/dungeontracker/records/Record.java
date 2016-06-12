@@ -9,24 +9,39 @@ public class Record {
 	private UUID player;
 	private Dungeon dungeon;
 	private Date finishTime;
-	private Date completionTime;	
+	private Date time;	
 	
 	/**
 	 * An object that stores information on a dungeon record.
 	 * @param player			The player that completed the dungeon.
 	 * @param dungeon			The dungeon completed.
 	 * @param finishTime		The time that the dungeon was completed.
-	 * @param completionTime	The time that it took the player to complete the dungeon.
+	 * @param time				The time that it took the player to complete the dungeon.
 	 */
-	public Record(UUID player, Dungeon dungeon, Date finishTime, Date completionTime){
+	public Record(UUID player, Dungeon dungeon, Date finishTime, Date time){
 		this.player = player;
 		this.dungeon = dungeon;
 		this.finishTime = finishTime;
-		this.completionTime = completionTime;
+		this.time = time;
 	}
 	
+	/**
+	 * @return	the UUID of the player.
+	 */
 	public UUID getPlayer() {return player;}
+	
+	/**
+	 * @return	the Dungeon that the record was completed in.
+	 */
 	public Dungeon getDungeon() {return dungeon;}
+	
+	/**
+	 * @return	the time that the dungeon was completed.
+	 */
 	public Date getFinishTime() {return finishTime;}
-	public Date getCompletionTime() {return completionTime;}
+	
+	/**
+	 * @return	the time it took the player to complete the dungeon.
+	 */
+	public Date getTime() {return time;}
 }
