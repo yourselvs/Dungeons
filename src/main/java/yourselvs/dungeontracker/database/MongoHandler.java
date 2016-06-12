@@ -160,7 +160,7 @@ public class MongoHandler implements IDatabase {
 				.append(v.mostSignificantBits, record.getPlayer().getMostSignificantBits())
 				.append(v.dungeon, record.getDungeon().getName())
 				.append(v.finishTime, record.getFinishTime().getTime())
-				.append(v.completionTime, record.getCompletionTime().getTime());
+				.append(v.completionTime, record.getTime().getTime());
 		db.insertDocument(doc);
 	}
 	
