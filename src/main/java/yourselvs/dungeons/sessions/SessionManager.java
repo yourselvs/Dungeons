@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import yourselvs.dungeons.Dungeons;
 
 public class SessionManager {
@@ -57,6 +59,18 @@ public class SessionManager {
 				sessions.remove(i);	
 				i--;
 			}
+	}
+	
+	/**
+	 * Finds the session of a specific player.
+	 * @param player	The player to search for
+	 * @return			the session found. If no session is found, returns null.
+	 */
+	public Session getSession(Player player){
+		for(Session session : sessions)
+			if(session.getPlayer().compareTo(player.getUniqueId()) == 0)
+				return session;
+		return null;
 	}
 	
 	/**

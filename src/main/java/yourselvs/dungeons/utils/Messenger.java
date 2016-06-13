@@ -1,4 +1,4 @@
-package yourselvs.dungeons.commands;
+package yourselvs.dungeons.utils;
 
 import java.util.Date;
 

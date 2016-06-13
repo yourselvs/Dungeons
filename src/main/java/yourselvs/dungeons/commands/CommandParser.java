@@ -9,11 +9,9 @@ import yourselvs.dungeons.Dungeons;
 
 public class CommandParser implements CommandExecutor{
 	private Dungeons plugin;
-	private Messenger messenger;
 	
 	public CommandParser(Dungeons instance){
 		this.plugin = instance;
-		this.messenger = new Messenger(instance);
 	}
 	
 	@Override
@@ -133,10 +131,10 @@ public class CommandParser implements CommandExecutor{
 		String subcmd = command.args[0];
 		if(command.sender instanceof Player){
 			Player player = (Player) command.sender;
-			messenger.commandNotFound(player, subcmd);
+			plugin.getMessenger().commandNotFound(player, subcmd);
 		}
 		else
-			messenger.commandNotFound(command.sender, subcmd);
+			plugin.getMessenger().commandNotFound(command.sender, subcmd);
 			
 		
 	}
