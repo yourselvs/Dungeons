@@ -27,12 +27,16 @@ public class DateFormatter {
      */
     public SimpleDateFormat getShortFormatter() {return shortFormat;}
     
+    /**
+     * Finds the difference between two times.
+     * @param date1	The first date to subtract.
+     * @param date2	The second date to subtract
+     * @return	date1 - date2
+     */
     public Date subtractTime(Date date1, Date date2){
-		boolean negative = false;
 		long time1 = date1.getTime();
 		long time2 = date2.getTime();
-		long difference = time2 - time1;
 
-		return new Date(difference);
+		return new Date(time1 - time2);
 	}
 }
