@@ -189,6 +189,7 @@ public class MongoHandler implements IDatabase {
 			items.add(item);
 		}
 		*/
+		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> itemList = (List<Map<String, Object>>) plugin.getConfigManager().getConfig(ConfigFile.CONFIG).get(/* path */ v.rewards + "." + dungeon);
 		for(Map<String, Object> itemMap : itemList){
 			items.add(ItemStack.deserialize(itemMap));
