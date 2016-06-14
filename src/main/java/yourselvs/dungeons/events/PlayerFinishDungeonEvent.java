@@ -2,24 +2,21 @@ package yourselvs.dungeons.events;
 
 import java.util.Date;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import yourselvs.dungeons.dungeons.Dungeon;
+import yourselvs.dungeons.sessions.Session;
 
 public class PlayerFinishDungeonEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	private Player player;
+	private Session session;
 	private Date time;
-	private Dungeon dungeon;
 	private boolean cancelled;
 
-	public PlayerFinishDungeonEvent(Player player, Date time, Dungeon dungeon) {
-		this.player = player;
+	public PlayerFinishDungeonEvent(Session session, Date time) {
+		this.session = session;
 		this.time = time;
-		this.setDungeon(dungeon);
 	}
 
 	public HandlerList getHandlers() {
@@ -29,29 +26,20 @@ public class PlayerFinishDungeonEvent extends Event {
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}
-
-	public Player getPlayer() {
-		return player;
+	
+	public Session getSession() {
+		return session;
 	}
 
-	public void setPlayer(Player player) {
-		this.player = player;
+	public void setSession(Session session) {
+		this.session = session;
 	}
-
 	public Date getTime() {
 		return time;
 	}
 
 	public void setTime(Date time) {
 		this.time = time;
-	}
-
-	public Dungeon getDungeon() {
-		return dungeon;
-	}
-
-	public void setDungeon(Dungeon dungeon) {
-		this.dungeon = dungeon;
 	}
 
 	public boolean isCancelled() {
