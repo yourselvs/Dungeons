@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import yourselvs.dungeons.Dungeons;
+import yourselvs.dungeons.dungeons.Dungeon;
 
 public class RecordManager {
 	private Dungeons plugin;
@@ -29,11 +30,11 @@ public class RecordManager {
 	 * @param dungeon	The name of the dungeon to search for.
 	 * @return			The list of records found.
 	 */
-	public List<Record> getRecords(String dungeon) {
+	public List<Record> getRecords(Dungeon dungeon) {
 		List<Record> records = new ArrayList<Record>();
 		
 		for(Record record : this.records)
-			if(record.getDungeon().getName().equalsIgnoreCase(dungeon))
+			if(record.getDungeon().getName().equalsIgnoreCase(dungeon.getName()))
 				records.add(record);
 		
 		return records;
@@ -52,6 +53,37 @@ public class RecordManager {
 			if(record.getPlayer().compareTo(uuid) == 0)
 				records.add(record);
 		return records;
+	}
+	
+	public List<Record> getRecords(Dungeon dungeon, UUID uuid) {
+		List<Record> records = new ArrayList<Record>();
+		
+		for(Record record : this.records)
+			if(record.getPlayer().compareTo(uuid) == 0 && record.getDungeon().getName().equalsIgnoreCase(dungeon.getName()))
+				records.add(record);
+		return records;
+	}
+	
+	public Record getFastestRecord(Dungeon dungeon){
+		List<Record> records = getRecords(dungeon);
+		Record record = null;
+		if(!records.isEmpty())
+			record = records.get(0);
+		for(Record rcrd : records)
+			if(rcrd.getTime().getTime() < record.getTime().getTime())
+				record = rcrd;
+		return record;
+	}
+	
+	public Record getFastestRecord(Dungeon dungeon, UUID player){
+		List<Record> records = getRecords(dungeon, player);
+		Record record = null;
+		if(!records.isEmpty())
+			record = records.get(0);
+		for(Record rcrd : records)
+			if(rcrd.getTime().getTime() < record.getTime().getTime())
+				record = rcrd;
+		return record;
 	}
 	
 	/**
