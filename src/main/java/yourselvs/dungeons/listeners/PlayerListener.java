@@ -8,34 +8,39 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import yourselvs.dungeons.Dungeons;
+import yourselvs.dungeons.events.PlayerFinishDungeonEvent;
+import yourselvs.dungeons.records.Record;
+import yourselvs.dungeons.sessions.Session;
 
 
 public class PlayerListener implements Listener{
 	private Dungeons plugin;
 	
 	public PlayerListener(Dungeons instance) {
-		this.plugin = plugin;
+		this.plugin = instance;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		if(plugin.getSessionManager().getS);
-			plugin.getMessenger().quitDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
+		Session session = plugin.getSessionManager().getSession(event.getPlayer());
+		if(session != null)
+			plugin.getMessenger().quitDungeon(event.getPlayer(), session);
 	}
 	
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
-		if(dungeon != null){ // if the joining player is in a dungeon
-			plugin.getMessenger().resumeDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
-		}
+		Session session = plugin.getSessionManager().getSession(event.getPlayer());
+		if(session != null) // if the joining player is in a dungeon
+			plugin.getMessenger().resumeDungeon(event.getPlayer(), session);
+		
 	}
 	
 	public void onFinishDungeon(PlayerFinishDungeonEvent event) {		
-		DungeonRecord record = plugin.getMongo().finishRecord(event.getPlayer());
-		plugin.getMessenger().finishDungeon(event.getPlayer(), record);
+		Record record = new Record(event.getSession().getPlayer(), event.getSession().getDungeon(), event.getTime(), plugin.getFormatter().subtractTime(event.getTime(), event.getSession().getStart()));
+		plugin.getSessionManager().removeSession(record.getPlayer());
+		plugin.getRecordManager().addRecord(record);
 		
-		DungeonRecord pr = plugin.getMongo().getFastestTime(event.getDungeon(), event.getPlayer());
-		DungeonRecord wr = plugin.getMongo().getFastestTime(event.getDungeon());
+		Record pr = plugin.getMongo().getFastestTime(event.getDungeon(), event.getPlayer());
+		Record wr = plugin.getMongo().getFastestTime(event.getDungeon());
 		
 		Date prDate = null;
 		Date wrDate = null;
