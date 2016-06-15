@@ -53,13 +53,13 @@ public class Messenger {
 		sendPlayerLog(player, "finished the dungeon \"" + record.getDungeon().getName() + "\" with a time of " + plugin.getFormatter().getShortFormatter().format(record.getTime()) + ".");
 	}
 	
-	public void beatDungeonPR(Player player, Record oldPR, Record newPR){
-		sendMessage(player, "You beat your old time by " + ChatColor.YELLOW + plugin.getFormatter().subtractTime(oldPR.getTime(), newPR.getTime()) + ChatColor.RESET + ".");
+	public void beatDungeonPR(Record oldPR, Record newPR){
+		sendMessage(plugin.getServer().getPlayer(newPR.getPlayer()), "You beat your old time by " + ChatColor.YELLOW + plugin.getFormatter().subtractTime(oldPR.getTime(), newPR.getTime()) + ChatColor.RESET + ".");
 	}
 	
-	public void beatDungeonWR(Player player, Record oldWR, Record newWR){		
+	public void beatDungeonWR(Record oldWR, Record newWR){		
 		sendServerMessage(ChatColor.DARK_PURPLE + "NEW WORLD RECORD");
-		sendServerMessage(ChatColor.YELLOW + player.getName() + " beat the world record time in \"" + ChatColor.YELLOW + newWR.getDungeon().getName() + ChatColor.RESET + " with a time of " + ChatColor.YELLOW + plugin.getFormatter().getShortFormatter().format(newWR.getTime()) + ChatColor.RESET + ", beating the world record by " + ChatColor.YELLOW + plugin.getFormatter().getShortFormatter().format(plugin.getFormatter().subtractTime(oldWR.getTime(), newWR.getTime())) + ChatColor.RESET + ".");
+		sendServerMessage(ChatColor.YELLOW + plugin.getServer().getPlayer(newWR.getPlayer()).getName() + " beat the world record time in \"" + ChatColor.YELLOW + newWR.getDungeon().getName() + ChatColor.RESET + " with a time of " + ChatColor.YELLOW + plugin.getFormatter().getShortFormatter().format(newWR.getTime()) + ChatColor.RESET + ", beating the world record by " + ChatColor.YELLOW + plugin.getFormatter().getShortFormatter().format(plugin.getFormatter().subtractTime(oldWR.getTime(), newWR.getTime())) + ChatColor.RESET + ".");
 	}
 	
 	public void commandNotFound(Player player, String command){
