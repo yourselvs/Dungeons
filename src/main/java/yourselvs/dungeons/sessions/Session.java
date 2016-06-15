@@ -21,6 +21,7 @@ public class Session {
 	 * @param uuid		The UUID of the player.
 	 * @param dungeon	The dungeon the player is in.
 	 * @param start		The time the player started.
+	 * @param location	The location the player was in upon staring the dungeon
 	 * @param inventory	The inventory the player had upon starting the dungeon
 	 */
 	public Session(UUID player, Dungeon dungeon, Date start, Location location, Inventory inventory){
