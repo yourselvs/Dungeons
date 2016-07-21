@@ -6,15 +6,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import yourselvs.dungeons.Dungeons;
-import yourselvs.dungeons.utils.Messenger;
 
 public class CommandParser implements CommandExecutor{
 	private Dungeons plugin;
-	private Messenger msg; // TODO rename to messenger after everything is finished
 	
 	public CommandParser(Dungeons instance){
 		this.plugin = instance;
-		this.msg = instance.getMessenger();
 	}
 	
 	@Override
@@ -25,212 +22,119 @@ public class CommandParser implements CommandExecutor{
 				command.getName().equalsIgnoreCase("dt") || command.getName().equalsIgnoreCase("dungeontracker")))
 			return false;
 		else if(cmd.args.length == 0)
-			parseDungeon(cmd);
+			processDungeon(cmd);
 		else{
 			String subcmd = args[0];
 
 			if(subcmd.equalsIgnoreCase("join")){
-				parseJoin(cmd);
+				processJoin(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("leave")){
-				parseLeave(cmd);
+				processLeave(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("forcejoin")){
-				parseForceJoin(cmd);
+				processForceJoin(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("forceleave")){
-				parseForceLeave(cmd);
+				processForceLeave(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("complete")){
-				parseComplete(cmd);
+				processComplete(cmd);
 			}
-			else if(subcmd.equalsIgnoreCase("top")){
-				parseTop(cmd);
+			else if(subcmd.equalsIgnoreCase("leaders")){
+				processLeaders(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("history")){
-				parseHistory(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("dhistory") || subcmd.equalsIgnoreCase("dungeonhistory")){
-				parseDungeonHistory(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("phistory") || subcmd.equalsIgnoreCase("playerhistory")){
-				parsePlayerHistory(cmd);
+				processHistory(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("record")){
 				parseRecord(cmd);
 			}
-			else if(subcmd.equalsIgnoreCase("precord") || subcmd.equalsIgnoreCase("playerrecord")){
-				parsePlayerRecord(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("rank")){
-				parseRank(cmd);
-			}
 			else if(subcmd.equalsIgnoreCase("create")){
-				parseCreate(cmd);
+				processCreate(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("delete")){
-				parseDelete(cmd);
+				processDelete(cmd);
 			}
-			else if(subcmd.equalsIgnoreCase("param") || subcmd.equalsIgnoreCase("parameter")){
-				parseParameter(cmd);
+			else if(subcmd.equalsIgnoreCase("param")){
+				processParam(cmd);
 			}
-			else if(subcmd.equalsIgnoreCase("cmd") || subcmd.equalsIgnoreCase("command")){
-				parseCommand(cmd);
+			else if(subcmd.equalsIgnoreCase("cmd")){
+				processCommand(cmd);
 			}
 			else if(plugin.getDungeonManager().dungeonExists(subcmd)){
-				parseViewDungeon(cmd);
+				processViewDungeon(cmd);
 			}
 			else
-				parseCommandNotFound(cmd);
+				processCommandNotFound(cmd);
 		}
 		return true;
 	}
 	
-	private void parseJoin(Cmd command){
-		// join [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseLeave(Cmd command){
-		// leave
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseForceJoin(Cmd command){
-		// forcejoin [player] [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseForceLeave(Cmd command){
-		// forceleave [player]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseComplete(Cmd command){
-		// complete [player]
-		if(command.sender instanceof Player){
-			Player player = (Player) command.sender;
-			return;
-		}
-	}
-	
-	private void parseTop(Cmd command){
-		// top [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseHistory(Cmd command){
-		// history [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseDungeonHistory(Cmd command){
-		// dhistory/dungeonhistory [player] [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parsePlayerHistory(Cmd command){
-		// phistory/playerhistory [player]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
+	private void processJoin(Cmd command){
 		
+	}
+	
+	private void processLeave(Cmd command){
+		
+	}
+	
+	private void processForceJoin(Cmd command){
+		
+	}
+	
+	private void processForceLeave(Cmd command){
+		
+	}
+	
+	private void processComplete(Cmd command){
+		
+	}
+	
+	private void processLeaders(Cmd command){
+		
+	}
+	
+	private void processHistory(Cmd command){
+		
+	}
+	
 	private void parseRecord(Cmd command){
-		// record [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parsePlayerRecord(Cmd command){
-		// precord/playerrecord [player] [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseRank(Cmd command){
-		// rank [dungeon]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseCreate(Cmd command){
-		// create [dungeon] [difficulty] [creator]
-		if(!(command.sender instanceof Player)){
-			command.sender.sendMessage("This feature of the Dungeons plugin is only accessible if you are a player.");
-			return;
-		}
-		Player player = (Player) command.sender;
-	}
-	
-	private void parseDelete(Cmd command){
-		// delete [dungeon]
-	}
-	
-	private void parseParameter(Cmd command){
-		// param/parameter [dungeon] [parameter] (true/false)
 		
 	}
 	
-	private void parseCommand(Cmd command){
-		// cmd/command [dungeon] [command] (true/false)
-	}
-	
-	private void parseDungeon(Cmd command){
+	private void processCreate(Cmd command){
 		
 	}
 	
-	private void parseViewDungeon(Cmd command){
+	private void processDelete(Cmd command){
 		
 	}
 	
-	private void parseCommandNotFound(Cmd command){
+	private void processParam(Cmd command){
+		
+	}
+	
+	private void processCommand(Cmd command){
+		
+	}
+	
+	private void processDungeon(Cmd command){
+		
+	}
+	
+	private void processViewDungeon(Cmd command){
+		
+	}
+	
+	private void processCommandNotFound(Cmd command){
 		String subcmd = command.args[0];
 		if(command.sender instanceof Player){
 			Player player = (Player) command.sender;
-			msg.commandNotFound(player, subcmd);
+			plugin.getMessenger().commandNotFound(player, subcmd);
 		}
 		else
-			msg.commandNotFound(command.sender, subcmd);
+			plugin.getMessenger().commandNotFound(command.sender, subcmd);
 			
 		
 	}
