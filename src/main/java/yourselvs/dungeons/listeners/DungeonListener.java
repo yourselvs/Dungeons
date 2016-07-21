@@ -1,6 +1,7 @@
 package yourselvs.dungeons.listeners;
 
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.events.DungeonPersonalRecordEvent;
@@ -41,6 +42,14 @@ public class DungeonListener implements Listener {
 		if(event.getTime().getTime() < wr.getTime().getTime()){ // if the player beats the world record
 			DungeonWorldRecordEvent wrEvent = new DungeonWorldRecordEvent(record, wr);
 			plugin.getServer().getPluginManager().callEvent(wrEvent);
+		}
+	}
+	
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Session session = plugin.getSessionManager().getSession(event.getPlayer());
+		if(session != null){
+			plugin.getSessionManager().removeSession(session.getPlayer());
+			plugin.getMessenger().quitDungeon(event.getPlayer(), session);
 		}
 	}
 	
