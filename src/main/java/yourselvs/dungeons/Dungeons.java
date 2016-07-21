@@ -8,6 +8,7 @@ import yourselvs.dungeons.database.MongoHandler;
 import yourselvs.dungeons.database.interfaces.IDatabase;
 import yourselvs.dungeons.database.interfaces.IMongo;
 import yourselvs.dungeons.dungeons.DungeonManager;
+import yourselvs.dungeons.listeners.DungeonListener;
 import yourselvs.dungeons.permissions.PermissionsManager;
 import yourselvs.dungeons.records.RecordManager;
 import yourselvs.dungeons.sessions.SessionManager;
@@ -29,6 +30,7 @@ public class Dungeons extends JavaPlugin
 	private ConfigManager configManager;
 	private PermissionsManager permissions;
 	private Messenger messenger;
+	private DungeonListener listener;
     
     @Override
 	public void onEnable() {
@@ -41,6 +43,7 @@ public class Dungeons extends JavaPlugin
     	configManager = new ConfigManager(this);
     	permissions = new PermissionsManager(this);
     	messenger = new Messenger(this);
+    	listener = new DungeonListener(this);
     	
     	dungeonManager.loadDungeons();    	
     	sessionManager.loadSessions();
@@ -62,4 +65,5 @@ public class Dungeons extends JavaPlugin
     public CommandParser getCommandParser() {return commandParser;}
     public ConfigManager getConfigManager() {return configManager;}
     public Messenger getMessenger() {return messenger;}
+    public DungeonListener getDungeonListener() {return listener;}
 }
