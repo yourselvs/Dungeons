@@ -3,7 +3,6 @@ package yourselvs.dungeons.dungeons;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import yourselvs.dungeons.Dungeons;
