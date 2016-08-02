@@ -33,6 +33,7 @@ public class MongoVars {
 	public final String mostSignificantBits = "mostSignificantBits";
 	public final String start = "start";
 	public final String sessions = "sessions";
+	public final String version = "version";
 	
 	// Values
 	public final String allowedValue = "allowed";
@@ -44,6 +45,7 @@ public class MongoVars {
 	public final String dungeonType = "dungeon";
 	public final String itemType = "item";
 	public final String sessionType = "session";
+	public final String versionType = "version";
 	
 	// Statuses
 	public final String completeStatus = "complete";

@@ -18,4 +18,6 @@ public interface IDatabase {
 	
 	public List<Record> getRecords();
 	public void addRecord(Record record);
+	
+	public String getVersion();
 }

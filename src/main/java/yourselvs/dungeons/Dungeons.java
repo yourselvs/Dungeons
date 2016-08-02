@@ -1,5 +1,7 @@
 package yourselvs.dungeons;
 
+import java.util.logging.Level;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import yourselvs.dungeons.commands.CommandManager;
@@ -63,6 +65,8 @@ public class Dungeons extends JavaPlugin
     	getCommand("dgn").setExecutor(commandParser);
     	getCommand("dt").setExecutor(commandParser);
     	getCommand("dungeontracker").setExecutor(commandParser);
+    	
+    	checkVersion();
     }
     
     public IDatabase getDB() {return db;}
@@ -75,4 +79,10 @@ public class Dungeons extends JavaPlugin
     public ConfigManager getConfigManager() {return configManager;}
     public Messenger getMessenger() {return messenger;}
     public DungeonListener getDungeonListener() {return listener;}
+    
+    private void checkVersion(){
+    	if(!version.equalsIgnoreCase(db.getVersion())){
+    		getServer().getLogger().log(Level.WARNING, "There is a newer version of the dungeons plugin available. Contact yourselvs for the new version.");;
+    	}
+    }
 }

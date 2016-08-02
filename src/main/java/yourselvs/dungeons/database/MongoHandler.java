@@ -164,6 +164,11 @@ public class MongoHandler implements IDatabase {
 		db.insertDocument(doc);
 	}
 	
+	public String getVersion(){
+		Document doc = db.findDocument(new Document(v.type, v.versionType));
+		return doc.getString(v.version);
+	}
+	
 	private Location buildLocation(Document doc){
 		String worldString = doc.getString(v.world);
 		World world = plugin.getServer().getWorld(worldString);
