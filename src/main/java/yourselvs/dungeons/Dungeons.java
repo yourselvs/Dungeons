@@ -2,6 +2,7 @@ package yourselvs.dungeons;
 
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import yourselvs.dungeons.commands.CommandManager;
@@ -22,6 +23,10 @@ import yourselvs.dungeons.utils.Messenger;
 public class Dungeons extends JavaPlugin
 {	
 	public String version = "2.0";
+	
+	private String prefix = "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + "]";
+	private String linkPrefix = ChatColor.AQUA + "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + ChatColor.AQUA + "]" + ChatColor.RESET;
+	private String unformattedPrefix = "[DGN]";
 	
 	private IMongo mongo;
 	private IDatabase db;
@@ -52,8 +57,10 @@ public class Dungeons extends JavaPlugin
     	commandManager = new CommandManager(this);
     	configManager = new ConfigManager(this);
     	permissions = new PermissionsManager(this);
-    	messenger = new Messenger(this);
+    	messenger = new Messenger(this, prefix, linkPrefix, unformattedPrefix);
     	listener = new DungeonListener(this);
+    	
+    	messenger.setPrefix(prefix);
     	
     	dungeonManager.loadDungeons();    	
     	sessionManager.loadSessions();
