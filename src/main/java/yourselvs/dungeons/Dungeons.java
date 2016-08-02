@@ -34,6 +34,11 @@ public class Dungeons extends JavaPlugin
 	private Messenger messenger;
 	private DungeonListener listener;
     
+	// TODO Make sure all UUID comparisons are fixed and not using "=="
+	// TODO Remove parameter functionality
+	// TODO Set parsers to run in threads
+	// TODO Add documentation to methods
+	
     @Override
 	public void onEnable() {
     	mongo = new MongoDBStorage(IMongo.textUri, "minecraft", "dungeon");
