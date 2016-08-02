@@ -2,6 +2,7 @@ package yourselvs.dungeons;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import yourselvs.dungeons.commands.CommandManager;
 import yourselvs.dungeons.commands.CommandParser;
 import yourselvs.dungeons.database.MongoDBStorage;
 import yourselvs.dungeons.database.MongoHandler;
