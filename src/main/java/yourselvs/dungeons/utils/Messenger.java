@@ -21,6 +21,9 @@ public class Messenger {
 	
 	public Messenger(JavaPlugin instance, String prefix, String linkPrefix, String unformattedPrefix){
 		this.plugin = instance;
+		this.prefix = prefix;
+		this.linkPrefix = prefix;
+		this.unformattedPrefix = prefix;
 	}
 	
 	public void setPrefix(String prefix){
