@@ -16,7 +16,6 @@ import yourselvs.dungeons.listeners.DungeonListener;
 import yourselvs.dungeons.permissions.PermissionsManager;
 import yourselvs.dungeons.records.RecordManager;
 import yourselvs.dungeons.sessions.SessionManager;
-import yourselvs.dungeons.utils.ConfigManager;
 import yourselvs.dungeons.utils.DateFormatter;
 import yourselvs.dungeons.utils.Messenger;
 
@@ -36,7 +35,6 @@ public class Dungeons extends JavaPlugin
 	private RecordManager recordManager;
 	private CommandParser commandParser;
 	private CommandManager commandManager;
-	private ConfigManager configManager;
 	private PermissionsManager permissions;
 	private Messenger messenger;
 	private DungeonListener listener;
@@ -55,7 +53,6 @@ public class Dungeons extends JavaPlugin
     	sessionManager = new SessionManager(this);
     	recordManager = new RecordManager(this);
     	commandManager = new CommandManager(this);
-    	configManager = new ConfigManager(this);
     	permissions = new PermissionsManager(this);
     	messenger = new Messenger(this, prefix, linkPrefix, unformattedPrefix);
     	listener = new DungeonListener(this);
@@ -65,7 +62,6 @@ public class Dungeons extends JavaPlugin
     	dungeonManager.loadDungeons();    	
     	sessionManager.loadSessions();
     	recordManager.loadRecords();
-    	configManager.loadConfigs();
     	permissions.loadPermissions();
     	
     	getCommand("dungeon").setExecutor(commandParser);
@@ -83,7 +79,6 @@ public class Dungeons extends JavaPlugin
     public RecordManager getRecordManager() {return recordManager;}
     public CommandParser getCommandParser() {return commandParser;}
     public CommandManager getCommandManager() {return commandManager;}
-    public ConfigManager getConfigManager() {return configManager;}
     public Messenger getMessenger() {return messenger;}
     public DungeonListener getDungeonListener() {return listener;}
     

@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.dungeons.Dungeon.Difficulty;
-import yourselvs.dungeons.utils.ConfigManager.ConfigFile;
 
 public class DungeonManager {
 	private Dungeons plugin;
