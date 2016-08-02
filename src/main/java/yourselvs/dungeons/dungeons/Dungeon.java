@@ -6,7 +6,17 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 public class Dungeon {
-	public enum Difficulty{EASY, MEDIUM, HARD, INSANE}
+	public enum Difficulty{EASY, MEDIUM, HARD, INSANE;
+
+	public static Difficulty parse(String string) {
+		if(string.equalsIgnoreCase("easy"))
+			return Difficulty.EASY;
+		if(string.equalsIgnoreCase("medium"))
+			return Difficulty.MEDIUM;
+		if(string.equalsIgnoreCase("hard"))
+			return Difficulty.HARD;
+		return Difficulty.INSANE;
+	}}
 	
 	private String name;
 	private Location start;
