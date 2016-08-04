@@ -21,7 +21,8 @@ import yourselvs.dungeons.utils.Messenger;
 
 public class Dungeons extends JavaPlugin
 {	
-	public String version = "2.0";
+	public final String version = "2.0";
+	public final String creator = "yourselvs";
 	
 	private String prefix = "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + "] ";
 	private String linkPrefix = ChatColor.AQUA + "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + ChatColor.AQUA + "]" + ChatColor.RESET + " ";
