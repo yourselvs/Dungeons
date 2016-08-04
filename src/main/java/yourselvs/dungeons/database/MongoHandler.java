@@ -3,15 +3,11 @@
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.database.interfaces.IDatabase;
 import yourselvs.dungeons.database.interfaces.IMongo;
@@ -19,7 +15,6 @@ import yourselvs.dungeons.dungeons.Dungeon;
 import yourselvs.dungeons.dungeons.Dungeon.Difficulty;
 import yourselvs.dungeons.records.Record;
 import yourselvs.dungeons.sessions.Session;
-import yourselvs.dungeons.utils.ConfigManager.ConfigFile;
 
 public class MongoHandler implements IDatabase {
 	private Dungeons plugin;
@@ -40,20 +35,10 @@ public class MongoHandler implements IDatabase {
 		for(Document doc : dungeonDocs){
 			String name = doc.getString(v.name);
 			Location start = buildLocation(doc);
-			List<ItemStack> reward = buildItems(name);
 			String creator = doc.getString(v.creator);
 			Difficulty difficulty = parseDifficulty(doc.getString(v.difficulty));
 			int timesCompleted = doc.getInteger(v.timesCompleted, 0);
-			Dungeon dungeon = new Dungeon(name, start, reward, creator, difficulty, timesCompleted);
-			dungeon.canPickupItem = doc.getBoolean(v.canPickupItem);
-			dungeon.canManipulateArmorStand = doc.getBoolean(v.canManipulateArmorStand);
-			dungeon.canEnterBed = doc.getBoolean(v.canEnterBed);
-			dungeon.canUseBucket = doc.getBoolean(v.canUseBucket);
-			dungeon.canDropItem = doc.getBoolean(v.canDropItem);
-			dungeon.canChangeExperience = doc.getBoolean(v.canChangeExperience);
-			dungeon.canFly = doc.getBoolean(v.canFly);
-			dungeon.canSneak = doc.getBoolean(v.canSneak);
-			dungeon.canSprint = doc.getBoolean(v.canSprint);
+			Dungeon dungeon = new Dungeon(name, start, creator, difficulty, timesCompleted);
 			dungeons.add(dungeon);
 		}
 		return dungeons;
@@ -73,22 +58,12 @@ public class MongoHandler implements IDatabase {
 				.append(v.locX, dungeon.getStart().getX())
 				.append(v.locY, dungeon.getStart().getY())
 				.append(v.locZ, dungeon.getStart().getZ())
-				.append(v.yaw, dungeon.getStart().getYaw())
-				.append(v.pitch, dungeon.getStart().getPitch())
+				.append(v.yaw, (int) dungeon.getStart().getYaw())
+				.append(v.pitch, (int) dungeon.getStart().getPitch())
 				.append(v.creator, dungeon.getCreator())
 				.append(v.difficulty, dungeon.getDifficulty().toString())
-				.append(v.timesCompleted, dungeon.getTimesCompleted())
-				.append(v.canPickupItem, dungeon.canPickupItem)
-				.append(v.canManipulateArmorStand, dungeon.canManipulateArmorStand)
-				.append(v.canEnterBed, dungeon.canEnterBed)
-				.append(v.canUseBucket, dungeon.canUseBucket)
-				.append(v.canDropItem, dungeon.canDropItem)
-				.append(v.canChangeExperience, dungeon.canChangeExperience)
-				.append(v.canFly, dungeon.canFly)
-				.append(v.canSneak, dungeon.canSneak)
-				.append(v.canSprint, dungeon.canSprint);
+				.append(v.timesCompleted, dungeon.getTimesCompleted());
 		db.insertDocument(doc);
-		plugin.getConfigManager().getConfig(ConfigFile.CONFIG).set(v.rewards + "." + dungeon.getName(), dungeon.getReward());
 	}
 	
 	@Override
@@ -109,9 +84,8 @@ public class MongoHandler implements IDatabase {
 			float yaw = doc.getInteger(v.yaw);
 			float pitch = doc.getInteger(v.pitch);
 			Location location = new Location(world, x, y, z, yaw, pitch);
-			Inventory inventory = (Inventory) plugin.getConfig().get(v.sessions + "." + uuid);
 			
-			sessions.add(new Session(uuid, dungeon, start, location, inventory));
+			sessions.add(new Session(uuid, dungeon, start, location));
 		}
 		return sessions;
 	}
@@ -122,9 +96,14 @@ public class MongoHandler implements IDatabase {
 				.append(v.leastSignificantBits, session.getPlayer().getLeastSignificantBits())
 				.append(v.mostSignificantBits, session.getPlayer().getMostSignificantBits())
 				.append(v.dungeon, session.getDungeon().getName())
-				.append(v.start, session.getStart().getTime());
+				.append(v.start, session.getStart().getTime())
+				.append(v.world, session.getLocation().getWorld().getName())
+				.append(v.locX, session.getLocation().getX())
+				.append(v.locY, session.getLocation().getY())
+				.append(v.locZ, session.getLocation().getZ())
+				.append(v.yaw, (int) session.getLocation().getYaw())
+				.append(v.pitch, (int) session.getLocation().getPitch());
 		db.insertDocument(doc);
-		plugin.getConfig().set(v.sessions + "." + session.getPlayer(), session.getInventory());
 	}
 
 	@Override
@@ -166,7 +145,8 @@ public class MongoHandler implements IDatabase {
 	
 	public String getVersion(){
 		Document doc = db.findDocument(new Document(v.type, v.versionType));
-		return doc.getString(v.version);
+		//return doc.getString(v.version);
+		return "2.0";
 	}
 	
 	private Location buildLocation(Document doc){
@@ -179,27 +159,6 @@ public class MongoHandler implements IDatabase {
 		float pitch = doc.getInteger(v.pitch);
 		Location loc = new Location(world, x, y, z, yaw, pitch);
 		return loc;
-	}
-	
-	private List<ItemStack> buildItems(String dungeon){
-		List<ItemStack> items = new ArrayList<ItemStack>();
-		/*
-		Document itemsToFind = new Document(v.type, v.itemType)
-				.append(v.dungeon, dungeon);
-		List<Document> itemDocs = db.findDocuments(itemsToFind);
-		for(Document itemDoc : itemDocs){
-			Document doc = itemDoc.get(v.item, Document.class);
-			String json = doc.toJson();
-			Item item = gson.fromJson(json, Item.class);
-			items.add(item);
-		}
-		*/
-		@SuppressWarnings("unchecked")
-		List<Map<String, Object>> itemList = (List<Map<String, Object>>) plugin.getConfigManager().getConfig(ConfigFile.CONFIG).get(/* path */ v.rewards + "." + dungeon);
-		for(Map<String, Object> itemMap : itemList){
-			items.add(ItemStack.deserialize(itemMap));
-		}
-		return items;
 	}
 	
 	private Difficulty parseDifficulty(String input){
