@@ -3,8 +3,11 @@ package yourselvs.dungeons;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import yourselvs.dungeons.commands.Cmd;
 import yourselvs.dungeons.commands.CommandManager;
 import yourselvs.dungeons.commands.CommandParser;
 import yourselvs.dungeons.database.MongoDBStorage;
@@ -12,6 +15,7 @@ import yourselvs.dungeons.database.MongoHandler;
 import yourselvs.dungeons.database.interfaces.IDatabase;
 import yourselvs.dungeons.database.interfaces.IMongo;
 import yourselvs.dungeons.dungeons.DungeonManager;
+import yourselvs.dungeons.listeners.CommandListener;
 import yourselvs.dungeons.listeners.DungeonListener;
 import yourselvs.dungeons.permissions.PermissionsManager;
 import yourselvs.dungeons.records.RecordManager;
@@ -38,7 +42,8 @@ public class Dungeons extends JavaPlugin
 	private CommandManager commandManager;
 	private PermissionsManager permissions;
 	private Messenger messenger;
-	private DungeonListener listener;
+	private DungeonListener dungeonListener;
+	private CommandListener commandListener;
     
 	// TODO Make sure all UUID comparisons are fixed and not using "=="
 	// TODO Remove parameter functionality
@@ -58,26 +63,21 @@ public class Dungeons extends JavaPlugin
     	mongo = new MongoDBStorage(IMongo.textUri, "minecraft", "dungeon");
     	db = new MongoHandler(this, mongo);
     	
+    	formatter = new DateFormatter();
     	dungeonManager = new DungeonManager(this);
     	sessionManager = new SessionManager(this);
     	recordManager = new RecordManager(this);
     	commandManager = new CommandManager(this);
+    	commandParser = new CommandParser(this);
     	permissions = new PermissionsManager(this);
     	messenger = new Messenger(this, prefix, linkPrefix, unformattedPrefix);
-    	listener = new DungeonListener(this);
+    	dungeonListener = new DungeonListener(this);
+    	commandListener = new CommandListener(this);
     	
-    	messenger.setPrefix(prefix);
-    	
-    	dungeonManager.loadDungeons();    	
-    	sessionManager.loadSessions();
-    	recordManager.loadRecords();
-    	permissions.loadPermissions();
-    	
-    	getCommand("dungeon").setExecutor(commandParser);
-    	getCommand("dgn").setExecutor(commandParser);
-    	getCommand("dt").setExecutor(commandParser);
-    	getCommand("dungeontracker").setExecutor(commandParser);
-    	
+	    dungeonManager.loadDungeons();    	
+	    sessionManager.loadSessions();
+	    recordManager.loadRecords();
+    
     	checkVersion();
     }
     
@@ -89,7 +89,8 @@ public class Dungeons extends JavaPlugin
     public CommandParser getCommandParser() {return commandParser;}
     public CommandManager getCommandManager() {return commandManager;}
     public Messenger getMessenger() {return messenger;}
-    public DungeonListener getDungeonListener() {return listener;}
+    public DungeonListener getDungeonListener() {return dungeonListener;}
+    public CommandListener getCommandListener() {return commandListener;}
     
     private void checkVersion(){
     	if(!version.equalsIgnoreCase(db.getVersion()))
