@@ -69,7 +69,7 @@ public class MongoHandler implements IDatabase {
 	public void addDungeon(Dungeon dungeon) {
 		Document doc = new Document(v.type, v.dungeonType)
 				.append(v.name, dungeon.getName())
-				.append(v.world, dungeon.getStart().getWorld())
+				.append(v.world, dungeon.getStart().getWorld().getName())
 				.append(v.locX, dungeon.getStart().getX())
 				.append(v.locY, dungeon.getStart().getY())
 				.append(v.locZ, dungeon.getStart().getZ())
