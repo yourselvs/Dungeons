@@ -23,9 +23,9 @@ public class Dungeons extends JavaPlugin
 {	
 	public String version = "2.0";
 	
-	private String prefix = "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + "]";
-	private String linkPrefix = ChatColor.AQUA + "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + ChatColor.AQUA + "]" + ChatColor.RESET;
-	private String unformattedPrefix = "[DGN]";
+	private String prefix = "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + "] ";
+	private String linkPrefix = ChatColor.AQUA + "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + ChatColor.AQUA + "]" + ChatColor.RESET + " ";
+	private String unformattedPrefix = "[DGN] ";
 	
 	private IMongo mongo;
 	private IDatabase db;
