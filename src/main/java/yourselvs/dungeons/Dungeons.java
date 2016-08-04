@@ -92,9 +92,8 @@ public class Dungeons extends JavaPlugin
     public DungeonListener getDungeonListener() {return listener;}
     
     private void checkVersion(){
-    	if(!version.equalsIgnoreCase(db.getVersion())){
-    		getServer().getLogger().log(Level.WARNING, "There is a newer version of the dungeons plugin available. Contact yourselvs for the new version.");;
-    	}
+    	if(!version.equalsIgnoreCase(db.getVersion()))
+    		getServer().getLogger().log(Level.WARNING, "There is a newer version of the dungeons plugin available. Contact yourselvs for the new version.");
     }
     
     @Override
