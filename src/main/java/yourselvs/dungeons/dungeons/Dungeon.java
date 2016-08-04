@@ -1,5 +1,10 @@
 package yourselvs.dungeons.dungeons;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.Location;
 
 public class Dungeon {
@@ -20,6 +25,7 @@ public class Dungeon {
 	private String creator;
 	private Difficulty difficulty;
 	private int timesCompleted;
+	private Set<String> commandsAllowed;
 	
 	/**
 	 * An object that stores information on a dungeon.
@@ -37,6 +43,7 @@ public class Dungeon {
 		this.creator = creator;
 		this.difficulty = difficulty;
 		this.timesCompleted = 0;
+		commandsAllowed = new HashSet<String>();
 	}
 	
 	/**
@@ -55,6 +62,7 @@ public class Dungeon {
 		this.creator = creator;
 		this.difficulty = difficulty;
 		this.timesCompleted = timesCompleted;
+		commandsAllowed = new HashSet<String>();
 	}
 	
 	public String getName() {return name;}
@@ -62,10 +70,20 @@ public class Dungeon {
 	public String getCreator() {return creator;}
 	public Difficulty getDifficulty() {return difficulty;}
 	public int getTimesCompleted() {return timesCompleted;}
+	public Set<String> getCommandsAllowed() {return commandsAllowed;}
 	
 	public void setName(String name) {this.name = name;}
 	public void setStart(Location start) {this.start = start;}
 	public void setCreator(String creator) {this.creator = creator;}
 	public void setDifficulty(Difficulty difficulty) {this.difficulty = difficulty;}
 	public void setTimesCompleted(int timesCompleted) {this.timesCompleted = timesCompleted;}
+	
+	public void addCommandAllowed(String command){commandsAllowed.add(command);}
+	public void removeCommandAllowed(String command){commandsAllowed.remove(command);}
+	
+	public boolean isCommandAllowed(String command){
+		if(commandsAllowed.contains(command))
+			return true;
+		return false;
+	}
 }
