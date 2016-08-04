@@ -96,4 +96,72 @@ public class Dungeons extends JavaPlugin
     		getServer().getLogger().log(Level.WARNING, "There is a newer version of the dungeons plugin available. Contact yourselvs for the new version.");;
     	}
     }
+    
+    @Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		Cmd cmd = new Cmd(sender, command, label, args);
+		if(cmd.args.length == 0)
+			commandParser.parseDungeon(cmd);
+		else{
+			String subcmd = args[0];
+
+			if(subcmd.equalsIgnoreCase("join")){
+				commandParser.parseJoin(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("leave")){
+				commandParser.parseLeave(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("list")){
+				commandParser.parseList(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("help")){
+				commandParser.parseHelp(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("forcejoin")){
+				commandParser.parseForceJoin(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("forceleave")){
+				commandParser.parseForceLeave(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("complete")){
+				commandParser.parseComplete(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("top")){
+				commandParser.parseTop(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("history")){
+				commandParser.parseHistory(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("dhistory") || subcmd.equalsIgnoreCase("dungeonhistory")){
+				commandParser.parseDungeonHistory(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("phistory") || subcmd.equalsIgnoreCase("playerhistory")){
+				commandParser.parsePlayerHistory(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("record")){
+				commandParser.parseRecord(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("precord") || subcmd.equalsIgnoreCase("playerrecord")){
+				commandParser.parsePlayerRecord(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("rank")){
+				commandParser.parseRank(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("create")){
+				commandParser.parseCreate(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("delete")){
+				commandParser.parseDelete(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("cmd") || subcmd.equalsIgnoreCase("command")){
+				commandParser.parseCommand(cmd);
+			}
+			else if(subcmd.equalsIgnoreCase("view")){
+				commandParser.parseViewDungeon(cmd);
+			}
+			else
+				commandParser.parseCommandNotFound(cmd);
+		}
+		return true;
+	}
 }
