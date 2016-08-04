@@ -19,6 +19,7 @@ public class SessionManager {
 	 */
 	public SessionManager(Dungeons instance){
 		this.plugin = instance;
+		sessions = new ArrayList<Session>();
 	}
 	
 	/**
@@ -91,5 +92,7 @@ public class SessionManager {
 	 * Loads all sessions from the database into the plugin.
 	 * @return	The list of sessions
 	 */
-	public void loadSessions(){sessions = plugin.getDB().getSessions();}
+	public void loadSessions(){
+		sessions = plugin.getDB().getSessions();
+	}
 }

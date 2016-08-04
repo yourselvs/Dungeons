@@ -41,6 +41,7 @@ public class DungeonManager {
 		canFlyDefault = cfg.getBoolean("parameters.canFly.default");
 		canSneakDefault = cfg.getBoolean("parameters.canSneak.default");
 		canSprintDefault = cfg.getBoolean("parameters.canSprint.default");
+		dungeons = new ArrayList<Dungeon>();
 	}
 	
 	/**
@@ -78,8 +79,8 @@ public class DungeonManager {
 	 * Loads the dungeons from the plugin database.
 	 * @return	The list of dungeons found.
 	 */
-	public List<Dungeon> loadDungeons(){
-    	return plugin.getDB().getDungeons();
+	public void loadDungeons(){
+		dungeons = plugin.getDB().getDungeons();
     }
 	
 	/**

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.dungeons.Dungeon;
 
@@ -18,6 +20,7 @@ public class RecordManager {
 	 */
 	public RecordManager(Dungeons instance){
 		this.plugin = instance;
+		records = new ArrayList<Record>();
 	}
 	
 	/**
@@ -58,9 +61,18 @@ public class RecordManager {
 	public List<Record> getRecords(Dungeon dungeon, UUID uuid) {
 		List<Record> records = new ArrayList<Record>();
 		
-		for(Record record : this.records)
-			if(record.getPlayer().compareTo(uuid) == 0 && record.getDungeon().getName().equalsIgnoreCase(dungeon.getName()))
+		for(Record record : this.records){
+			UUID player = record.getPlayer();
+			int compare = player.compareTo(uuid);
+			boolean compareBool = compare == 0;
+			
+			Dungeon dungeonTemp = record.getDungeon();
+			String name = dungeonTemp.getName();
+			String otherName = dungeon.getName();
+			boolean dungeonBool = name.equalsIgnoreCase(otherName);
+			if(compareBool && dungeonBool)
 				records.add(record);
+		}
 		return records;
 	}
 	
@@ -115,10 +127,8 @@ public class RecordManager {
 	
 	/**
 	 * Loads records into server memory.
-	 * @return	The list of records.
 	 */
-	public List<Record> loadRecords(){
+	public void loadRecords(){
 		records = plugin.getDB().getRecords();
-		return records;
 	}
 }
