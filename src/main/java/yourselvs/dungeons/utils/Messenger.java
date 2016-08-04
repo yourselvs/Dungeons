@@ -1,6 +1,8 @@
 package yourselvs.dungeons.utils;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,12 +48,13 @@ public class Messenger {
 		player.sendMessage(prefix + ChatColor.RESET + message + ChatColor.RESET);
 	}
 	
-	public void sendMessages(Player player, ArrayList<String> messages){
+	public void sendMessages(Player player, List<String> msgs){
 		ArrayList<String> updateMessages = new ArrayList<String>();
-		updateMessages.add("- - - - - - - - - - - - - - ");
-		for(String message : messages)
+		updateMessages.add(prefix + "- - - - - - - - - - - - - - ");
+		for(String message : msgs)
 			updateMessages.add(message + ChatColor.RESET);
-		player.sendMessage(messages.toArray(new String[messages.size()]));
+		updateMessages.add(prefix + "- - - - - - - - - - - - - - ");
+		player.sendMessage(updateMessages.toArray(new String[msgs.size()]));
 	}
 	
 	public void sendMessage(CommandSender player, String message){
