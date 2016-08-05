@@ -24,10 +24,11 @@ public class CommandListener implements Listener{
 			return;
 		if(event.getMessage().charAt(0) != '/')
 			return;
-		if(event.getMessage().equalsIgnoreCase("/dungeon leave") || event.getMessage().equalsIgnoreCase("/suicide"))
+		String command = event.getMessage().substring(1, event.getMessage().indexOf(' '));
+		if(session.getDungeon().getCommandsAllowed().contains(command))
 			return;
-		//String command = event.getMessage().substring(1, event.getMessage().indexOf(' '));
-		plugin.getMessenger().sendMessage(event.getPlayer(), "You cannot use this command while you are in a dungeon. Use " + ChatColor.YELLOW + "/dungeon leave" + ChatColor.RESET + " to leave the dungeon.");
+		
+		plugin.getMessenger().sendMessage(event.getPlayer(), "You cannot use this command while you are in a dungeon.");
 		event.setCancelled(true);
 	}
 }
