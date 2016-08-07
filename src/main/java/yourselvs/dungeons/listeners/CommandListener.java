@@ -4,7 +4,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import net.md_5.bungee.api.ChatColor;
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.sessions.Session;
 
@@ -24,7 +23,7 @@ public class CommandListener implements Listener{
 			return;
 		if(event.getMessage().charAt(0) != '/')
 			return;
-		String command = event.getMessage().substring(1, event.getMessage().indexOf(' '));
+		String command = event.getMessage().substring(1);
 		if(session.getDungeon().getCommandsAllowed().contains(command))
 			return;
 		
