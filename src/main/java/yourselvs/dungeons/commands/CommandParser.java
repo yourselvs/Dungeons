@@ -477,7 +477,7 @@ public class CommandParser{
 	}
 	
 	public void parseCommand(Cmd command){
-		// cmd/command [dungeon] [command] (true/false)
+		// cmd/command [dungeon] [command] (add/remove)
 		if(!(command.sender instanceof Player)){ // Make sure the user is a player 
 			plugin.getMessenger().sendMessage(command.sender, "This feature of the Dungeons plugin is only accessible if you are a player.");
 			return;
@@ -500,17 +500,35 @@ public class CommandParser{
 			plugin.getMessenger().sendMessage(command.sender, "You must include a command.");
 			return;
 		}
-		if(command.args.length < 4){ // Check if the user didn't include a value
+		if(!isParsableCommand(command.args[2])){ // Check if the boolean value entered is parsable
+			plugin.getMessenger().sendMessage(player, "Value must be either " + ChatColor.YELLOW + "add" + ChatColor.RESET + "/" + ChatColor.YELLOW + "remove" + ChatColor.RESET + "/" + ChatColor.YELLOW + "view" + ChatColor.RESET + ".");
+			return;
+		}
+		String action = command.args[2];
+		if(command.args.length < 4){ // Check if the user didn't include a command
 			plugin.getCommandManager().viewCommand(player, dungeon, command.args[2]);
 			return;
 		}
-		if(!isParsableBool(command.args[3])){ // Check if the boolean value entered is parsable
-			plugin.getMessenger().sendMessage(player, "Value must be either " + ChatColor.YELLOW + "true" + ChatColor.RESET + " or " + ChatColor.YELLOW + "false" + ChatColor.RESET + ".");
-			return;
-		}
-		boolean value = parseBool(command.args[3]);
+		String commandString = command.args[3];
+		for(int i = 4; i < command.args.length; i++)
+			commandString = commandString + " " + command.args[i];
 		
-		plugin.getCommandManager().setCommand(player, dungeon, command.args[2], value);
+		
+		if(action.equalsIgnoreCase("remove")){
+			if(!dungeon.getCommandsAllowed().contains(commandString))
+				plugin.getMessenger().sendMessage(player, "This command is already not allowed.");
+			else
+				plugin.getCommandManager().removeCommand(player, dungeon, commandString);
+		}
+		else if(action.equalsIgnoreCase("add")){
+			if(dungeon.getCommandsAllowed().contains(commandString))
+				plugin.getMessenger().sendMessage(player, "This command is already allowed.");
+			else
+				plugin.getCommandManager().addCommand(player, dungeon, commandString);
+		}
+		else{
+			plugin.getCommandManager().viewCommand(player, dungeon, commandString);
+		}
 	}
 	
 	public void parseViewDungeon(Cmd command){
@@ -572,15 +590,9 @@ public class CommandParser{
 	}
 	
 	public boolean isParsableCommand(String input){
-		if(input.equalsIgnoreCase("allow") || input.equalsIgnoreCase("block"))
+		if(input.equalsIgnoreCase("add") || input.equalsIgnoreCase("remove") || input.equalsIgnoreCase("view"))
 			return true;
 		return false;
-	}
-	
-	public boolean parseCommand(String input){
-	    if(input.equalsIgnoreCase("allow"))
-	    	return true;
-	    return false;
 	}
 	
 	public boolean isParsableDifficulty(String input){

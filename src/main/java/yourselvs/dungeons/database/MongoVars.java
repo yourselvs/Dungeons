@@ -34,6 +34,7 @@ public class MongoVars {
 	public final String start = "start";
 	public final String sessions = "sessions";
 	public final String version = "version";
+	public final String command = "command";
 	
 	// Values
 	public final String allowedValue = "allowed";

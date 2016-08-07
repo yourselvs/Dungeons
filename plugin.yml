@@ -7,7 +7,6 @@ commands:
     dungeon:
         description: Access to Dungeons commands.
         usage: /<command>
-        aliases: [dgn, dt, dungeontracker]
 permissions:
     dungeon:
         default: true

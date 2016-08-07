@@ -53,7 +53,6 @@ public class Dungeons extends JavaPlugin
 	// TODO Add permissions to dungeons
 	// TODO Set up database version doc
 	// TODO Add dungeon create event
-	// TODO Add commandsAllowed to Dungeon class
 	// TODO Set mongo accessors in threads
 	// TODO Remember if players were flying when starting a dungeon
 	// TODO Add reset command to dungeons to remove records

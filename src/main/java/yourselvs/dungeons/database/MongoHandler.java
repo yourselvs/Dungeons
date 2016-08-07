@@ -2,7 +2,9 @@
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bson.Document;
@@ -39,17 +41,14 @@ public class MongoHandler implements IDatabase {
 			Difficulty difficulty = parseDifficulty(doc.getString(v.difficulty));
 			int timesCompleted = doc.getInteger(v.timesCompleted, 0);
 			Dungeon dungeon = new Dungeon(name, start, creator, difficulty, timesCompleted);
+			Set<String> commandsAllowed = getCommandsAllowed(name);
+			for(String command : commandsAllowed)
+				dungeon.addCommandAllowed(command);
 			dungeons.add(dungeon);
 		}
 		return dungeons;
 	}
-
-	@Override
-	public void removeDungeon(String dungeon) {
-		db.deleteDocuments(new Document(v.type, v.dungeonType)
-				.append(v.name, dungeon));
-	}
-
+	
 	@Override
 	public void addDungeon(Dungeon dungeon) {
 		Document doc = new Document(v.type, v.dungeonType)
@@ -64,6 +63,47 @@ public class MongoHandler implements IDatabase {
 				.append(v.difficulty, dungeon.getDifficulty().toString())
 				.append(v.timesCompleted, dungeon.getTimesCompleted());
 		db.insertDocument(doc);
+		
+		for(String command : dungeon.getCommandsAllowed())
+			addCommandAllowed(dungeon.getName(), command);
+	}
+
+	@Override
+	public void removeDungeon(String dungeon) {
+		db.deleteDocuments(new Document(v.type, v.dungeonType)
+				.append(v.name, dungeon));
+		
+		db.deleteDocuments(new Document(v.type, v.command)
+				.append(v.dungeon, dungeon));
+	}
+	
+	@Override
+	public Set<String> getCommandsAllowed(String dungeon) {
+		Set<String> commands = new HashSet<String>();
+		Document docsToFind = new Document(v.type, v.commandType)
+				.append(v.dungeon, dungeon);
+		List<Document> commandDocs = db.findDocuments(docsToFind);
+		for(Document doc : commandDocs){
+			String command = doc.getString(v.command);
+			commands.add(command);
+		}
+		return commands;
+	}
+	
+	@Override
+	public void addCommandAllowed(String dungeon, String command){
+		Document doc = new Document(v.type, v.commandType)
+				.append(v.dungeon, dungeon)
+				.append(v.command, command);
+		db.insertDocument(doc);
+	}
+	
+	@Override
+	public void removeCommandAllowed(String dungeon, String command){
+		Document doc = new Document(v.type, v.commandType)
+				.append(v.dungeon, dungeon)
+				.append(v.command, command);
+		db.deleteDocuments(doc);
 	}
 	
 	@Override
@@ -143,10 +183,10 @@ public class MongoHandler implements IDatabase {
 		db.insertDocument(doc);
 	}
 	
+	@Override
 	public String getVersion(){
 		Document doc = db.findDocument(new Document(v.type, v.versionType));
-		//return doc.getString(v.version);
-		return "2.0";
+		return doc.getString(v.version);
 	}
 	
 	private Location buildLocation(Document doc){
@@ -168,7 +208,6 @@ public class MongoHandler implements IDatabase {
 			return Difficulty.MEDIUM;
 		if(input.equalsIgnoreCase(v.hard))
 			return Difficulty.HARD;
-		return Difficulty.INSANE;
-		
+		return Difficulty.INSANE;	
 	}
 }

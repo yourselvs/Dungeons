@@ -46,6 +46,8 @@ public class CommandManager {
 			msgs.add(ChatColor.YELLOW + "/dungeon create [dungeon] [difficulty] [creator]" + ChatColor.RESET + " : Creates a dungeon with a spawn at the point you are standing");
 			msgs.add(ChatColor.YELLOW + "/dungeon delete [dungeon]" + ChatColor.RESET + " : Deletes a dungeon");
 		}
+		if(player.hasPermission("dungeon.command"))
+			msgs.add(ChatColor.YELLOW + "/dungeon command [dungeon] [add/remove/view] [command]");
 		
 		plugin.getMessenger().sendMessages(player, msgs);
 	}
@@ -130,6 +132,7 @@ public class CommandManager {
 	
 	public void createDungeon(Player player, String name, Difficulty difficulty, String creator){
 		Dungeon dungeon = new Dungeon(name, player.getLocation(), creator, difficulty);
+		dungeon.addCommandAllowed("dungeon leave");
 		plugin.getDungeonManager().addDungeon(dungeon);
 		plugin.getMessenger().sendMessage(player, "Dungeon created: " + ChatColor.YELLOW + name);
 	}
@@ -139,11 +142,20 @@ public class CommandManager {
 	}
 	
 	public void viewCommand(Player player, Dungeon dungeon, String command){
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+		if(dungeon.getCommandsAllowed().contains(command))
+			plugin.getMessenger().sendMessage(player, "The command " + ChatColor.GREEN + command + ChatColor.RESET + " is allowed in " + ChatColor.YELLOW + dungeon.getName());
+		else
+			plugin.getMessenger().sendMessage(player, "The command " + ChatColor.RED + command + ChatColor.RESET + " is not allowed in " + ChatColor.YELLOW + dungeon.getName());
 	}
 	
-	public void setCommand(Player player, Dungeon dungeon, String command, boolean value){
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+	public void addCommand(Player player, Dungeon dungeon, String command){
+		plugin.getDungeonManager().addCommandAllowed(dungeon.getName(), command);
+		plugin.getMessenger().sendMessage(player, "Command now allowed in " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + ": " + ChatColor.GREEN + command);
+	}
+	
+	public void removeCommand(Player player, Dungeon dungeon, String command){
+		plugin.getDungeonManager().removeCommandAllowed(dungeon.getName(), command);
+		plugin.getMessenger().sendMessage(player, "Command no longer allowed in " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + ": " + ChatColor.RED + command);
 	}
 	
 	public void viewDungeon(Player player, Dungeon dungeon){

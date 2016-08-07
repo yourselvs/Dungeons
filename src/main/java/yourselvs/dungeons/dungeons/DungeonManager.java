@@ -35,6 +35,16 @@ public class DungeonManager {
 		plugin.getDB().addDungeon(dungeon);
 	}
 	
+	public void addCommandAllowed(String dungeon, String command){
+		getDungeon(dungeon).addCommandAllowed(command);
+		plugin.getDB().addCommandAllowed(dungeon, command);
+	}
+	
+	public void removeCommandAllowed(String dungeon, String command){
+		getDungeon(dungeon).removeCommandAllowed(command);
+		plugin.getDB().removeCommandAllowed(dungeon, command);
+	}
+	
 	/**
 	 * Removes a dungeon from the plugin.
 	 * @param dungeon	The name of the dungeon that should be removed.
