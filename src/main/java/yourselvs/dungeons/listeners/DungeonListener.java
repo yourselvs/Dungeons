@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -74,7 +73,7 @@ public class DungeonListener implements Listener {
 			DungeonPersonalRecordEvent prEvent = new DungeonPersonalRecordEvent(record, pr);
 			plugin.getServer().getPluginManager().callEvent(prEvent);
 		}
-		if(wr != null ||(record.getTime().getTime() < wr.getTime().getTime())){ // if the player beats the world record
+		if(wr == null ||(record.getTime().getTime() < wr.getTime().getTime())){ // if the player beats the world record
 			DungeonWorldRecordEvent wrEvent = new DungeonWorldRecordEvent(record, wr);
 			plugin.getServer().getPluginManager().callEvent(wrEvent);
 		}

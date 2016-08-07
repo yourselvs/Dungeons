@@ -40,7 +40,7 @@ public class Dungeons extends JavaPlugin
 	private RecordManager recordManager;
 	private CommandParser commandParser;
 	private CommandManager commandManager;
-	private PermissionsManager permissions;
+	private PermissionsManager permissionsManager;
 	private Messenger messenger;
 	private DungeonListener dungeonListener;
 	private CommandListener commandListener;
@@ -63,7 +63,7 @@ public class Dungeons extends JavaPlugin
     	recordManager = new RecordManager(this);
     	commandManager = new CommandManager(this);
     	commandParser = new CommandParser(this);
-    	permissions = new PermissionsManager(this);
+    	permissionsManager = new PermissionsManager(this);
     	messenger = new Messenger(this, prefix, linkPrefix, unformattedPrefix);
     	dungeonListener = new DungeonListener(this);
     	commandListener = new CommandListener(this);
@@ -82,6 +82,7 @@ public class Dungeons extends JavaPlugin
     public RecordManager getRecordManager() {return recordManager;}
     public CommandParser getCommandParser() {return commandParser;}
     public CommandManager getCommandManager() {return commandManager;}
+    public PermissionsManager getPermissionsManager() {return permissionsManager;}
     public Messenger getMessenger() {return messenger;}
     public DungeonListener getDungeonListener() {return dungeonListener;}
     public CommandListener getCommandListener() {return commandListener;}

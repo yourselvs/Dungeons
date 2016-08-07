@@ -1,7 +1,5 @@
 package yourselvs.dungeons.events;
 
-import java.util.Date;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

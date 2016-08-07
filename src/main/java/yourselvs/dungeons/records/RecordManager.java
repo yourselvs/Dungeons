@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
-
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.dungeons.Dungeon;
 
