@@ -44,11 +44,7 @@ public class Dungeons extends JavaPlugin
 	private Messenger messenger;
 	private DungeonListener dungeonListener;
 	private CommandListener commandListener;
-    
-	// Important
-	// TODO Set mongo accessors to run in threads
 	
-	// Eventually
 	// TODO Set parsers to run in threads
 	// TODO Add documentation to methods
 	// TODO Add maximum number of people in dungeon
