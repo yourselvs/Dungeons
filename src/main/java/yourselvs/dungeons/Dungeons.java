@@ -45,15 +45,15 @@ public class Dungeons extends JavaPlugin
 	private DungeonListener dungeonListener;
 	private CommandListener commandListener;
     
-	// TODO Make sure all UUID comparisons are fixed and not using "=="
-	// TODO Remove parameter functionality
+	// Important
+	// TODO Set mongo accessors to run in threads
+	
+	// Eventually
 	// TODO Set parsers to run in threads
 	// TODO Add documentation to methods
 	// TODO Add maximum number of people in dungeon
 	// TODO Add permissions to dungeons
-	// TODO Set up database version doc
 	// TODO Add dungeon create event
-	// TODO Set mongo accessors in threads
 	// TODO Remember if players were flying when starting a dungeon
 	// TODO Add reset command to dungeons to remove records
 	
