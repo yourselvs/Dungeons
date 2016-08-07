@@ -104,24 +104,25 @@ public class RecordManager {
 	 */
 	public void addRecord(Record record){
 		records.add(record);
-		plugin.getDB().addRecord(record);
-	}
-	
-	public void removeRecord(UUID player){
-		for(int i = 0; i < records.size(); i++){
-			if(records.get(i).getPlayer() == player){
-				records.remove(i);
-				i--;
-			}
-		}
+		new Thread(new Runnable() {
+	        public void run(){
+	        	plugin.getDB().addRecord(record);
+	        }
+	    }).start();
 	}
 	
 	public void removeRecord(String dungeon){
 		for(int i = 0; i < records.size(); i++){
 			if(records.get(i).getDungeon().getName().equalsIgnoreCase(dungeon)){
 				records.remove(i);
+				
 				i--;
 			}
+			new Thread(new Runnable() {
+		        public void run(){
+		        	plugin.getDB().removeRecord(dungeon);
+		        }
+		    }).start();
 		}
 	}
 	

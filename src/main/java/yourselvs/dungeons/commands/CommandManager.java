@@ -139,6 +139,8 @@ public class CommandManager {
 	
 	public void deleteDungeon(Player player, Dungeon dungeon){
 		plugin.getDungeonManager().removeDungeon(dungeon.getName());
+		plugin.getSessionManager().removeSession(dungeon.getName());
+		plugin.getRecordManager().removeRecord(dungeon.getName());
 	}
 	
 	public void viewCommand(Player player, Dungeon dungeon, String command){

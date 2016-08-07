@@ -33,7 +33,11 @@ public class SessionManager {
 	 */
 	public void addSession(Session session) {
 		sessions.add(session);
-		plugin.getDB().addSession(session);
+		new Thread(new Runnable() {
+	        public void run(){
+	        	plugin.getDB().addSession(session);
+	        }
+	    }).start();
 	}
 	
 	/**
@@ -43,10 +47,15 @@ public class SessionManager {
 	public void removeSession(UUID player) {
 		for(int i = 0; i < sessions.size(); i++)
 			if(sessions.get(i).getPlayer() == player){
-				sessions.remove(i);
-				plugin.getDB().removeSession(player);
+				sessions.remove(i);				
 				break;
 			}
+		new Thread(new Runnable() {
+	        public void run(){
+	        	plugin.getDB().removeSession(player);
+	        }
+	    }).start();
+		
 	}
 	
 	/**
@@ -56,8 +65,15 @@ public class SessionManager {
 	public void removeSession(String dungeon) {
 		for(int i = 0; i < sessions.size(); i++)
 			if(sessions.get(i).getDungeon().getName().equalsIgnoreCase(dungeon)){
-				plugin.getDB().removeSession(sessions.get(i).getPlayer());
+				Session session = sessions.get(i);
+				Player player = plugin.getServer().getPlayer(session.getPlayer());
+				player.teleport(session.getLocation());
 				sessions.remove(i);	
+				new Thread(new Runnable() {
+			        public void run(){
+			        	plugin.getDB().removeSession(session.getPlayer());
+			        }
+			    }).start();
 				i--;
 			}
 	}

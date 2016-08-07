@@ -22,6 +22,7 @@ public interface IDatabase {
 	public void addSession(Session session);
 	
 	public List<Record> getRecords();
+	public void removeRecord(String dungeon);
 	public void addRecord(Record record);
 	
 	public String getVersion();

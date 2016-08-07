@@ -32,34 +32,46 @@ public class DungeonManager {
 	 */
 	public void addDungeon(Dungeon dungeon){
 		dungeons.add(dungeon);
-		plugin.getDB().addDungeon(dungeon);
+		new Thread(new Runnable() {
+	        public void run(){
+	        	plugin.getDB().addDungeon(dungeon);
+	        }
+	    }).start();
 	}
 	
 	public void addCommandAllowed(String dungeon, String command){
 		getDungeon(dungeon).addCommandAllowed(command);
-		plugin.getDB().addCommandAllowed(dungeon, command);
+		new Thread(new Runnable() {
+	        public void run(){
+	        	plugin.getDB().addCommandAllowed(dungeon, command);
+	        }
+	    }).start();
 	}
 	
 	public void removeCommandAllowed(String dungeon, String command){
 		getDungeon(dungeon).removeCommandAllowed(command);
-		plugin.getDB().removeCommandAllowed(dungeon, command);
+		new Thread(new Runnable() {
+	        public void run(){
+	        	plugin.getDB().removeCommandAllowed(dungeon, command);
+	        }
+	    }).start();
 	}
 	
 	/**
 	 * Removes a dungeon from the plugin.
 	 * @param dungeon	The name of the dungeon that should be removed.
 	 */
-	public boolean removeDungeon(String dungeon){
-		boolean found = false;
+	public void removeDungeon(String dungeon){
 		for(int i = 0; i < dungeons.size(); i++)
 			if(dungeons.get(i).getName().equalsIgnoreCase(dungeon)){
-				plugin.getSessionManager().removeSession(dungeon);
 				dungeons.remove(i);
-				plugin.getDB().removeDungeon(dungeon);
-				found = true;
 				break;
 			}
-		return found;
+		new Thread(new Runnable() {
+	        public void run(){
+	        	plugin.getDB().removeDungeon(dungeon);
+	        }
+	    }).start();
 	}
 	
 	/**

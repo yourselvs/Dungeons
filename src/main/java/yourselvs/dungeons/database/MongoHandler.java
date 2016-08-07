@@ -184,6 +184,13 @@ public class MongoHandler implements IDatabase {
 	}
 	
 	@Override
+	public void removeRecord(String dungeon) {
+		Document doc = new Document(v.type, v.recordType)
+				.append(v.dungeon, dungeon);
+		db.deleteDocuments(doc);
+	}
+	
+	@Override
 	public String getVersion(){
 		Document doc = db.findDocument(new Document(v.type, v.versionType));
 		return doc.getString(v.version);
