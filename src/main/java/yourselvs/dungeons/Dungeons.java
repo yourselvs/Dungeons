@@ -45,7 +45,6 @@ public class Dungeons extends JavaPlugin
 	private DungeonListener dungeonListener;
 	private CommandListener commandListener;
 	
-	// TODO Set parsers to run in threads
 	// TODO Add documentation to methods
 	// TODO Add maximum number of people in dungeon
 	// TODO Add permissions to dungeons
@@ -95,8 +94,13 @@ public class Dungeons extends JavaPlugin
     @Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		Cmd cmd = new Cmd(sender, command, label, args);
-		if(cmd.args.length == 0)
-			commandParser.parseDungeon(cmd);
+		if(cmd.args.length == 0){
+			new Thread(new Runnable() {
+		        public void run(){
+		        	commandParser.parseDungeon(cmd);
+		        }
+		    }).start();
+		}
 		else{
 			String subcmd = args[0];
 
@@ -107,10 +111,18 @@ public class Dungeons extends JavaPlugin
 				commandParser.parseLeave(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("list")){
-				commandParser.parseList(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseList(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("help")){
-				commandParser.parseHelp(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseHelp(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("forcejoin")){
 				commandParser.parseForceJoin(cmd);
@@ -122,25 +134,53 @@ public class Dungeons extends JavaPlugin
 				commandParser.parseComplete(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("top")){
-				commandParser.parseTop(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseTop(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("history")){
-				commandParser.parseHistory(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseHistory(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("dhistory") || subcmd.equalsIgnoreCase("dungeonhistory")){
-				commandParser.parseDungeonHistory(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseDungeonHistory(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("phistory") || subcmd.equalsIgnoreCase("playerhistory")){
-				commandParser.parsePlayerHistory(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parsePlayerHistory(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("record")){
-				commandParser.parseRecord(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseRecord(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("precord") || subcmd.equalsIgnoreCase("playerrecord")){
-				commandParser.parsePlayerRecord(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parsePlayerRecord(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("rank")){
-				commandParser.parseRank(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseRank(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("create")){
 				commandParser.parseCreate(cmd);
@@ -149,13 +189,27 @@ public class Dungeons extends JavaPlugin
 				commandParser.parseDelete(cmd);
 			}
 			else if(subcmd.equalsIgnoreCase("cmd") || subcmd.equalsIgnoreCase("command")){
-				commandParser.parseCommand(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseCommand(cmd);
+			        }
+			    }).start();
 			}
 			else if(subcmd.equalsIgnoreCase("view")){
-				commandParser.parseViewDungeon(cmd);
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseViewDungeon(cmd);
+			        }
+			    }).start();
 			}
-			else
-				commandParser.parseCommandNotFound(cmd);
+			else{
+				new Thread(new Runnable() {
+			        public void run(){
+			        	commandParser.parseCommandNotFound(cmd);
+			        }
+			    }).start();
+			}
+				
 		}
 		return true;
 	}
