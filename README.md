@@ -4,4 +4,4 @@ Dungeons is a simple Minecraft plugin that allows servers to create courses know
 
 ## Installation
 
-When a release has been completed I will put a download link to the .jar file here.
+Once more features are implemented that allow multiple servers to use the plugin, a jar will be distributed.
