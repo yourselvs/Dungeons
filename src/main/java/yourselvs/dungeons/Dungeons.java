@@ -5,6 +5,8 @@ import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import yourselvs.dungeons.commands.Cmd;
@@ -27,6 +29,8 @@ public class Dungeons extends JavaPlugin
 {	
 	public final String version = "2.0";
 	public final String creator = "yourselvs";
+	
+	private boolean dbConfigured = false;
 	
 	private String prefix = "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + "] ";
 	private String linkPrefix = ChatColor.AQUA + "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + ChatColor.AQUA + "]" + ChatColor.RESET + " ";
@@ -54,17 +58,40 @@ public class Dungeons extends JavaPlugin
 	
     @Override
 	public void onEnable() {
-    	mongo = new MongoDBStorage(IMongo.textUri, "minecraft", "dungeon");
-    	db = new MongoHandler(this, mongo);
+    	saveDefaultConfig();
+    	FileConfiguration config = getConfig();
+    	
+    	String textUri = config.getString("textUri");
+    	String dbName = config.getString("dbName");
+    	String collectionName = config.getString("collectionName");
+    	
+    	if(textUri.equalsIgnoreCase("not configured"))
+    		return;
+    	if(dbName.equalsIgnoreCase("not configured"))
+    		return;
+    	if(collectionName.equalsIgnoreCase("not configured"))
+    		return;
+    	
+    	commandManager = new CommandManager(this);
+    	commandParser = new CommandParser(this);
+    	messenger = new Messenger(this, prefix, linkPrefix, unformattedPrefix);
+    	
+    	try {
+	    	mongo = new MongoDBStorage(textUri, dbName, collectionName);
+	    	db = new MongoHandler(this, mongo);
+	    } 
+    	catch (Exception e) {
+    		e.printStackTrace();
+    		return;
+    	}
+    	
+    	dbConfigured = true;
     	
     	formatter = new DateFormatter();
+    	permissionsManager = new PermissionsManager(this);
     	dungeonManager = new DungeonManager(this);
     	sessionManager = new SessionManager(this);
     	recordManager = new RecordManager(this);
-    	commandManager = new CommandManager(this);
-    	commandParser = new CommandParser(this);
-    	permissionsManager = new PermissionsManager(this);
-    	messenger = new Messenger(this, prefix, linkPrefix, unformattedPrefix);
     	dungeonListener = new DungeonListener(this);
     	commandListener = new CommandListener(this);
     	
@@ -72,7 +99,7 @@ public class Dungeons extends JavaPlugin
 	    sessionManager.loadSessions();
 	    recordManager.loadRecords();
     
-    	checkVersion();
+	    checkVersion();
     }
     
     public IDatabase getDB() {return db;}
@@ -95,122 +122,126 @@ public class Dungeons extends JavaPlugin
     @Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		Cmd cmd = new Cmd(sender, command, label, args);
-		if(cmd.args.length == 0){
-			new Thread(new Runnable() {
-		        public void run(){
-		        	commandParser.parseDungeon(cmd);
-		        }
-		    }).start();
-		}
+		
+		if(!dbConfigured)
+			sender.sendMessage(prefix + "Your plugin database is not properly configured. Ask your server administrators to fix this issue.");
 		else{
-			String subcmd = args[0];
-
-			if(subcmd.equalsIgnoreCase("join")){
-				commandParser.parseJoin(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("leave")){
-				commandParser.parseLeave(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("list")){
+			if(cmd.args.length == 0){
 				new Thread(new Runnable() {
 			        public void run(){
-			        	commandParser.parseList(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("help")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseHelp(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("forcejoin")){
-				commandParser.parseForceJoin(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("forceleave")){
-				commandParser.parseForceLeave(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("complete")){
-				commandParser.parseComplete(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("top")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseTop(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("history")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseHistory(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("dhistory") || subcmd.equalsIgnoreCase("dungeonhistory")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseDungeonHistory(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("phistory") || subcmd.equalsIgnoreCase("playerhistory")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parsePlayerHistory(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("record")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseRecord(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("precord") || subcmd.equalsIgnoreCase("playerrecord")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parsePlayerRecord(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("rank")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseRank(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("create")){
-				commandParser.parseCreate(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("delete")){
-				commandParser.parseDelete(cmd);
-			}
-			else if(subcmd.equalsIgnoreCase("cmd") || subcmd.equalsIgnoreCase("command")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseCommand(cmd);
-			        }
-			    }).start();
-			}
-			else if(subcmd.equalsIgnoreCase("view")){
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseViewDungeon(cmd);
+			        	commandParser.parseDungeon(cmd);
 			        }
 			    }).start();
 			}
 			else{
-				new Thread(new Runnable() {
-			        public void run(){
-			        	commandParser.parseCommandNotFound(cmd);
-			        }
-			    }).start();
-			}
+				String subcmd = args[0];
 				
+				if(subcmd.equalsIgnoreCase("join")){
+					commandParser.parseJoin(cmd);
+				}
+				else if(subcmd.equalsIgnoreCase("leave")){
+					commandParser.parseLeave(cmd);
+				}
+				else if(subcmd.equalsIgnoreCase("list")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseList(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("help")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseHelp(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("forcejoin")){
+					commandParser.parseForceJoin(cmd);
+				}
+				else if(subcmd.equalsIgnoreCase("forceleave")){
+					commandParser.parseForceLeave(cmd);
+				}
+				else if(subcmd.equalsIgnoreCase("complete")){
+					commandParser.parseComplete(cmd);
+				}
+				else if(subcmd.equalsIgnoreCase("top")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseTop(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("history")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseHistory(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("dhistory") || subcmd.equalsIgnoreCase("dungeonhistory")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseDungeonHistory(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("phistory") || subcmd.equalsIgnoreCase("playerhistory")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parsePlayerHistory(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("record")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseRecord(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("precord") || subcmd.equalsIgnoreCase("playerrecord")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parsePlayerRecord(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("rank")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseRank(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("create")){
+					commandParser.parseCreate(cmd);
+				}
+				else if(subcmd.equalsIgnoreCase("delete")){
+					commandParser.parseDelete(cmd);
+				}
+				else if(subcmd.equalsIgnoreCase("cmd") || subcmd.equalsIgnoreCase("command")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseCommand(cmd);
+				        }
+				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("view")){
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseViewDungeon(cmd);
+				        }
+				    }).start();
+				}
+				else{
+					new Thread(new Runnable() {
+				        public void run(){
+				        	commandParser.parseCommandNotFound(cmd);
+				        }
+				    }).start();
+				}
+			}	
 		}
 		return true;
 	}
