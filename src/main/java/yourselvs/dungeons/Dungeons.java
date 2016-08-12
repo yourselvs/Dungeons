@@ -1,7 +1,5 @@
 package yourselvs.dungeons;
 
-import java.util.logging.Level;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,7 +23,7 @@ import yourselvs.dungeons.utils.DateFormatter;
 import yourselvs.dungeons.utils.Messenger;
 
 public class Dungeons extends JavaPlugin
-{	
+{
 	public final String version = "2.0";
 	public final String creator = "yourselvs";
 	
@@ -48,6 +46,7 @@ public class Dungeons extends JavaPlugin
 	private DungeonListener dungeonListener;
 	private CommandListener commandListener;
 	
+	// TODO Add dungeons that can only be completed while in a vehicle
 	// TODO Add documentation to methods
 	// TODO Add maximum number of people in dungeon
 	// TODO Add permissions to dungeons
@@ -97,8 +96,6 @@ public class Dungeons extends JavaPlugin
 	    dungeonManager.loadDungeons();    	
 	    sessionManager.loadSessions();
 	    recordManager.loadRecords();
-    
-	    checkVersion();
     }
     
     public IDatabase getDB() {return db;}
@@ -112,11 +109,6 @@ public class Dungeons extends JavaPlugin
     public Messenger getMessenger() {return messenger;}
     public DungeonListener getDungeonListener() {return dungeonListener;}
     public CommandListener getCommandListener() {return commandListener;}
-    
-    private void checkVersion(){
-    	if(!version.equalsIgnoreCase(db.getVersion()))
-    		getServer().getLogger().log(Level.WARNING, "There is a newer version of the dungeons plugin available. Contact yourselvs for the new version.");
-    }
     
     @Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
