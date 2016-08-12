@@ -69,11 +69,11 @@ public class DungeonListener implements Listener {
 		plugin.getMessenger().sendMessage(player, "PR time: " + ChatColor.YELLOW + prTime);
 		plugin.getMessenger().sendMessage(player, "WR time: " + ChatColor.YELLOW + wrTime);
 		
-		if(pr == null ||(record.getTime().getTime() < pr.getTime().getTime())){
+		if(pr != null && (record.getTime().getTime() < pr.getTime().getTime())){
 			DungeonPersonalRecordEvent prEvent = new DungeonPersonalRecordEvent(record, pr);
 			plugin.getServer().getPluginManager().callEvent(prEvent);
 		}
-		if(wr == null ||(record.getTime().getTime() < wr.getTime().getTime())){ // if the player beats the world record
+		if(wr != null && (record.getTime().getTime() < wr.getTime().getTime())){ // if the player beats the world record
 			DungeonWorldRecordEvent wrEvent = new DungeonWorldRecordEvent(record, wr);
 			plugin.getServer().getPluginManager().callEvent(wrEvent);
 		}
