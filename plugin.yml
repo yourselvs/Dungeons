@@ -11,21 +11,21 @@ permissions:
     dungeon:
         default: true
     dungeon.info:
-        default: true
+        default: op
     dungeon.join:
-        default: true
+        default: op
     dungeon.forcejoin:
         default: op
     dungeon.forceleave:
         default: op
     dungeon.top:
-        default: true
+        default: op
     dungeon.history:
         default: op
     dungeon.record:
-        default: true
+        default: op
     dungeon.rank:
-        default: true
+        default: op
     dungeon.create:
         default: op
     dungeon.command:
