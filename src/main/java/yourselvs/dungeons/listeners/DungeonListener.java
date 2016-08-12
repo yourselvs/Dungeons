@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import yourselvs.dungeons.Dungeons;
@@ -26,6 +25,8 @@ public class DungeonListener implements Listener {
 		this.plugin = instance;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 		plugin.getMessenger().sendServerMessage("Dungeon listener enabled");
+		
+		
 	}
 	
 	@EventHandler
@@ -84,13 +85,17 @@ public class DungeonListener implements Listener {
 		plugin.getSessionManager().removeSession(event.getPlayer().getUniqueId());
 	}
 	
+	/*
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		Session session = plugin.getSessionManager().getSession(event.getPlayer());
-		if(session != null){
-			plugin.getSessionManager().removeSession(session.getPlayer());
-		}
+	public void onPlayerLeave(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		Session session = plugin.getSessionManager().getSession(player);
+		if(session == null)
+			return;
+		player.teleport(session.getLocation());
+		plugin.getSessionManager().removeSession(player.getUniqueId());
 	}
+	*/
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerRespawnEvent event) {
