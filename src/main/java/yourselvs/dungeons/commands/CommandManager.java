@@ -104,30 +104,37 @@ public class CommandManager {
 	}
 	
 	public void viewTop(Player player, Dungeon dungeon){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
 	public void viewHistory(Player player, Player target, Dungeon dungeon){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
 	public void viewDungeonHistory(Player player, Dungeon dungeon){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
 	public void viewPlayerHistory(Player player, Player target){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
 	public void viewRecord(Player player, Dungeon dungeon){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
 	public void viewPlayerRecord(Player player, Player target, Dungeon dungeon){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
 	public void viewRank(Player player, Dungeon dungeon){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
@@ -162,6 +169,7 @@ public class CommandManager {
 	}
 	
 	public void viewDungeon(Player player, Dungeon dungeon){
+		// TODO Implement feature
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
