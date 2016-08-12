@@ -46,7 +46,7 @@ public class SessionManager {
 	 */
 	public void removeSession(UUID player) {
 		for(int i = 0; i < sessions.size(); i++)
-			if(sessions.get(i).getPlayer() == player){
+			if(sessions.get(i).getPlayer().compareTo(player) == 0){
 				sessions.remove(i);				
 				break;
 			}
