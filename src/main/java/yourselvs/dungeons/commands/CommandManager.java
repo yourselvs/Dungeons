@@ -92,6 +92,7 @@ public class CommandManager {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if(!event.isCancelled())
 			player.teleport(session.getLocation());
+		player.getInventory().clear();
 		plugin.getMessenger().sendMessage(player, "Leaving dungeon: " + ChatColor.YELLOW + session.getDungeon().getName());
 	}
 	
