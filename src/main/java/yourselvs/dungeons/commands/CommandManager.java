@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import yourselvs.dungeons.Dungeons;
@@ -14,6 +15,7 @@ import yourselvs.dungeons.dungeons.Dungeon.Difficulty;
 import yourselvs.dungeons.events.PlayerFinishDungeonEvent;
 import yourselvs.dungeons.events.PlayerLeaveDungeonEvent;
 import yourselvs.dungeons.events.PlayerStartDungeonEvent;
+import yourselvs.dungeons.records.Record;
 import yourselvs.dungeons.sessions.Session;
 
 public class CommandManager {
@@ -83,6 +85,7 @@ public class CommandManager {
 		if(!event.isCancelled())
 			player.teleport(dungeon.getStart());
 		player.setFlying(false);
+		player.setGameMode(GameMode.SURVIVAL);
 		player.getInventory().clear();
 		plugin.getMessenger().sendMessage(player, "Joining dungeon: " + ChatColor.YELLOW + dungeon.getName());
 	}
@@ -124,13 +127,21 @@ public class CommandManager {
 	}
 	
 	public void viewRecord(Player player, Dungeon dungeon){
-		// TODO Implement feature
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+		Record record = plugin.getRecordManager().getFastestRecord(dungeon);
+		
+		if(record == null)
+			plugin.getMessenger().sendMessage(player, ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " hasn't been completed yet.");
+		else
+			plugin.getMessenger().sendMessage(player, ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " world record: " + plugin.getFormatter().getShortFormatter().format(record.getTime()));
 	}
 	
 	public void viewPlayerRecord(Player player, Player target, Dungeon dungeon){
-		// TODO Implement feature
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+		Record record = plugin.getRecordManager().getFastestRecord(dungeon, target.getUniqueId());
+		
+		if(record == null)
+			plugin.getMessenger().sendMessage(player, "This player hasn't completed " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + "yet.");
+		else
+			plugin.getMessenger().sendMessage(player, ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " world record: " + plugin.getFormatter().getShortFormatter().format(record.getTime()));
 	}
 	
 	public void viewRank(Player player, Dungeon dungeon){
@@ -169,12 +180,37 @@ public class CommandManager {
 	}
 	
 	public void viewDungeon(Player player, Dungeon dungeon){
-		// TODO Implement feature
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+		List<String> messages = new ArrayList<String>();
+		
+		messages.add("Dungeon: " + ChatColor.YELLOW + dungeon.getName());
+		
+		String difficulty = dungeon.getDifficulty().toString();
+		if(difficulty.equalsIgnoreCase("easy"))
+			difficulty = ChatColor.GREEN + difficulty;
+		if(difficulty.equalsIgnoreCase("medium"))
+			difficulty = ChatColor.YELLOW + difficulty;
+		if(difficulty.equalsIgnoreCase("hard"))
+			difficulty = ChatColor.RED + difficulty;
+		if(difficulty.equalsIgnoreCase("insne"))
+			difficulty = ChatColor.DARK_RED + difficulty;
+		messages.add("Difficulty: " + difficulty);
+		
+		messages.add("Creator: " + dungeon.getCreator());
+		
+		Record wr = plugin.getRecordManager().getFastestRecord(dungeon);
+		String record;
+		if(wr == null)
+			record = "N/A";
+		else
+			record = plugin.getFormatter().getShortFormatter().format(wr.getTime());	
+		messages.add("WR: " + ChatColor.YELLOW + record);
+		
+		plugin.getMessenger().sendMessages(player, messages);
 	}
 	
 	public void viewInfo(Player player){
 		plugin.getMessenger().sendMessage(player, "Dungeons plugin v" + ChatColor.YELLOW + plugin.version);
 		plugin.getMessenger().sendMessage(player, "Created by " + ChatColor.YELLOW + plugin.creator);
+		plugin.getMessenger().sendMessage(player, "Type ");
 	}
 }
