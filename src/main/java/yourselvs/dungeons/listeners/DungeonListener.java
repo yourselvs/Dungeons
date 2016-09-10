@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.events.DungeonPersonalRecordEvent;
@@ -102,6 +103,14 @@ public class DungeonListener implements Listener {
 		Session session = plugin.getSessionManager().getSession(event.getPlayer());
 		if(session != null){
 			event.setRespawnLocation(session.getDungeon().getStart());
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerFly(PlayerToggleFlightEvent event) {
+		Session session = plugin.getSessionManager().getSession(event.getPlayer());
+		if(session != null){
+			event.getPlayer().setFlying(false);
 		}
 	}
 }
