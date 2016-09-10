@@ -33,12 +33,18 @@ public class CommandManager {
 		List<String> msgs = new ArrayList<String>();
 		
 		msgs.add("Available commands:");
-		if(player.hasPermission("dungeon.info"))
+		if(player.hasPermission("dungeon.info")){
 			msgs.add(ChatColor.YELLOW + "/dungeon" + ChatColor.RESET + " : View information about the plugin");
+		}
 		if(player.hasPermission("dungeon.join")){
 			msgs.add(ChatColor.YELLOW + "/dungeon list" + ChatColor.RESET + " : List the dungeons you are able to join");
+			msgs.add(ChatColor.YELLOW + "/dungeon view [dungeon]" + ChatColor.RESET + " : View information about a dungeon");
 			msgs.add(ChatColor.YELLOW + "/dungeon join [dungeon]" + ChatColor.RESET + " : Joins a dungeon");
 			msgs.add(ChatColor.YELLOW + "/dungeon leave" + ChatColor.RESET + " : Leaves the dungeon you are in");
+		}
+		if(player.hasPermission("dungeon.record")){
+			msgs.add(ChatColor.YELLOW + "/dungeon record [dungeon]" + ChatColor.RESET + " : Views the fastest time of a dungeon");
+			msgs.add(ChatColor.YELLOW + "/dungeon precord [player] [dungeon]" + ChatColor.RESET + " : Views a player's fastest time in a dungeon");
 		}
 		if(player.hasPermission("dungeon.forcejoin"))
 			msgs.add(ChatColor.YELLOW + "/dungeon forcejoin [player] [dungeon]" + ChatColor.RESET + " : Forces a player to join a dungeon");
@@ -131,8 +137,19 @@ public class CommandManager {
 		
 		if(record == null)
 			plugin.getMessenger().sendMessage(player, ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " hasn't been completed yet.");
-		else
-			plugin.getMessenger().sendMessage(player, ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " world record: " + plugin.getFormatter().getShortFormatter().format(record.getTime()));
+		else{
+			String name;
+			Player target = plugin.getServer().getPlayer(record.getPlayer());
+			
+			if(target == null)
+				name = plugin.getServer().getOfflinePlayer(record.getPlayer()).getName();
+			else
+				name = target.getName();
+			
+			plugin.getMessenger().sendMessage(player, "The world record in " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + 
+					" is " + ChatColor.YELLOW + plugin.getFormatter().getShortFormatter().format(record.getTime()) + ChatColor.RESET + 
+					", held by " + ChatColor.YELLOW + name);
+		}
 	}
 	
 	public void viewPlayerRecord(Player player, Player target, Dungeon dungeon){
@@ -140,8 +157,10 @@ public class CommandManager {
 		
 		if(record == null)
 			plugin.getMessenger().sendMessage(player, "This player hasn't completed " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + "yet.");
-		else
-			plugin.getMessenger().sendMessage(player, ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " world record: " + plugin.getFormatter().getShortFormatter().format(record.getTime()));
+		else						
+			plugin.getMessenger().sendMessage(player, "" +  ChatColor.YELLOW + Bukkit.getPlayer(record.getPlayer()).getName() + ChatColor.RESET + " has a record of " + 
+					ChatColor.YELLOW + plugin.getFormatter().getShortFormatter().format(record.getTime()) + ChatColor.RESET + 
+					" in " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET);
 	}
 	
 	public void viewRank(Player player, Dungeon dungeon){
@@ -211,6 +230,6 @@ public class CommandManager {
 	public void viewInfo(Player player){
 		plugin.getMessenger().sendMessage(player, "Dungeons plugin v" + ChatColor.YELLOW + plugin.version);
 		plugin.getMessenger().sendMessage(player, "Created by " + ChatColor.YELLOW + plugin.creator);
-		plugin.getMessenger().sendMessage(player, "Type ");
+		plugin.getMessenger().sendMessage(player, "Type " + ChatColor.YELLOW + "/dungeon help" + ChatColor.RESET + " to view commands.");
 	}
 }

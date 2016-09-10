@@ -359,7 +359,11 @@ public class CommandParser{
 			plugin.getMessenger().sendMessage(player, "You must include a player.");
 			return;
 		}
+		
 		Player target = plugin.getServer().getPlayer(command.args[1]); // Get the player from the server
+		if(target == null)
+			target = plugin.getServer().getOfflinePlayer(command.args[1]).getPlayer();
+		
 		if(target == null){ // Check if the player exists
 			plugin.getMessenger().sendMessage(player, "Player not found: " + ChatColor.YELLOW + command.args[1]);
 			return;
