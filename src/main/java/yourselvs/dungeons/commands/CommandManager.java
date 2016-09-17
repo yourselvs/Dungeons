@@ -1,6 +1,7 @@
 package yourselvs.dungeons.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import yourselvs.dungeons.events.PlayerFinishDungeonEvent;
 import yourselvs.dungeons.events.PlayerLeaveDungeonEvent;
 import yourselvs.dungeons.events.PlayerStartDungeonEvent;
 import yourselvs.dungeons.records.Record;
+import yourselvs.dungeons.records.RecordManager;
 import yourselvs.dungeons.sessions.Session;
 
 public class CommandManager {
@@ -46,6 +48,8 @@ public class CommandManager {
 			msgs.add(ChatColor.YELLOW + "/dungeon record [dungeon]" + ChatColor.RESET + " : Views the fastest time of a dungeon");
 			msgs.add(ChatColor.YELLOW + "/dungeon precord [player] [dungeon]" + ChatColor.RESET + " : Views a player's fastest time in a dungeon");
 		}
+		if(player.hasPermission("dungeon.top"))
+			msgs.add(ChatColor.YELLOW + "/dungeon top [dungeon]" + ChatColor.RESET + " : Views the top records in a dungeon");
 		if(player.hasPermission("dungeon.forcejoin"))
 			msgs.add(ChatColor.YELLOW + "/dungeon forcejoin [player] [dungeon]" + ChatColor.RESET + " : Forces a player to join a dungeon");
 		if(player.hasPermission("dungeon.forceleave"))
@@ -113,8 +117,39 @@ public class CommandManager {
 	}
 	
 	public void viewTop(Player player, Dungeon dungeon){
-		// TODO Implement feature
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+		List<Record> records = plugin.getRecordManager().getRecords(dungeon);
+		Collections.sort(records);
+		records = RecordManager.removeDuplicatePlayers(records);
+
+		if(records.size() == 0){
+			player.sendMessage("Nobody has completed " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " yet.");
+			return;
+		}
+		
+		int maxRecord = 10;
+		
+		if(records.size() < maxRecord)
+			maxRecord = records.size();
+		
+		List<String> messages = new ArrayList<String>();
+		messages.add("Top " + ChatColor.YELLOW + maxRecord + ChatColor.RESET + " records for " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + ":");
+		
+		for(int i = 0; i < maxRecord; i++){
+			
+			
+			String time = plugin.getFormatter().getShortFormatter().format(records.get(i).getTime());
+			String targetName = "";
+			
+			Player target = Bukkit.getPlayer(records.get(i).getPlayer());
+			if(target == null)
+				targetName = Bukkit.getOfflinePlayer(records.get(i).getPlayer()).getName();
+			else
+				targetName = target.getName();
+			
+			messages.add((i + 1) + ") " + ChatColor.YELLOW + targetName + ChatColor.RESET + " : " + time);
+		}
+		
+		plugin.getMessenger().sendMessages(player, messages);
 	}
 	
 	public void viewHistory(Player player, Player target, Dungeon dungeon){

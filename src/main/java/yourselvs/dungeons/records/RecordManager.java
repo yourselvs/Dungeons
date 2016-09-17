@@ -1,7 +1,10 @@
 package yourselvs.dungeons.records;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import yourselvs.dungeons.Dungeons;
@@ -76,13 +79,8 @@ public class RecordManager {
 	
 	public Record getFastestRecord(Dungeon dungeon){
 		List<Record> records = getRecords(dungeon);
-		Record record = null;
-		if(!records.isEmpty())
-			record = records.get(0);
-		for(Record rcrd : records)
-			if(rcrd.getTime().getTime() < record.getTime().getTime())
-				record = rcrd;
-		return record;
+		Collections.sort(records);
+		return records.get(0);
 	}
 	
 	public Record getFastestRecord(Dungeon dungeon, UUID player){
@@ -129,5 +127,22 @@ public class RecordManager {
 	 */
 	public void loadRecords(){
 		records = plugin.getDB().getRecords();
+	}
+	
+	public static List<Record> removeDuplicatePlayers(List<Record> records){
+		Set<UUID> players = new HashSet<UUID>();
+		
+		for(int i = 0; i < records.size(); i++){
+			Record record = records.get(i);
+			
+			if(players.contains(record.getPlayer())){
+				records.remove(i);
+				i--;
+			}
+			else
+				players.add(record.getPlayer());
+		}
+		
+		return records;
 	}
 }

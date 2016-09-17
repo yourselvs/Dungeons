@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import yourselvs.dungeons.dungeons.Dungeon;
 
-public class Record {
+public class Record implements Comparable<Record>{
 	private UUID player;
 	private Dungeon dungeon;
 	private Date finishTime;
@@ -44,4 +44,9 @@ public class Record {
 	 * @return	the time it took the player to complete the dungeon.
 	 */
 	public Date getTime() {return time;}
+
+	@Override
+	public int compareTo(Record record) {
+		return (int) (time.getTime() - record.time.getTime());
+	}
 }
