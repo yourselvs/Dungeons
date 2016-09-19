@@ -1,6 +1,6 @@
 # DungeonTracker
 
-Dungeons is a simple Minecraft plugin that allows servers to create courses known as "dungeons", which players have to race through under set conditions and limitations. This plugin is actually a rebuild of a plugin titled DungeonTracker. DungeonTracker was messy and difficult to manage, and there were several things I wanted to change fundamentally. When I started it up and it was dysfunctional I decided to start all over from scratch and rebuild the plugin. This is the result.
+Dungeons is a simple Minecraft plugin that allows servers to create timed courses known as "dungeons". Players must get from a start point to an end point in order to complete a dungeon. In between is any kind of obstacle the server decides to place. The plugin keeps track of leaderboards and records of all players and dungeons. All database and file management is done using a service called MLab, so absolutely 0 stress is put on the server in order to manage files.
 
 ## Installation
 
