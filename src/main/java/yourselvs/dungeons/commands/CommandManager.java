@@ -33,10 +33,11 @@ public class CommandManager {
 	
 	public void viewHelp(Player player) {
 		List<String> msgs = new ArrayList<String>();
-		
+	
 		msgs.add("Available commands:");
 		if(player.hasPermission("dungeon.info")){
 			msgs.add(ChatColor.YELLOW + "/dungeon" + ChatColor.RESET + " : View information about the plugin");
+			msgs.add(ChatColor.YELLOW + "/dungeon join" + ChatColor.RESET + " : Vews command help.");
 		}
 		if(player.hasPermission("dungeon.join")){
 			msgs.add(ChatColor.YELLOW + "/dungeon list" + ChatColor.RESET + " : List the dungeons you are able to join");
@@ -60,7 +61,8 @@ public class CommandManager {
 		}
 		if(player.hasPermission("dungeon.command"))
 			msgs.add(ChatColor.YELLOW + "/dungeon command [dungeon] [add/remove/view] [command]");
-		
+		if(player.hasPermission("dungeon.checkpoint"))
+			msgs.add(ChatColor.YELLOW + "/dungeon checkpoint [dungeon] [add/remove/list] [name]");
 		plugin.getMessenger().sendMessages(player, msgs);
 	}
 	
@@ -118,11 +120,12 @@ public class CommandManager {
 	
 	public void viewTop(Player player, Dungeon dungeon){
 		List<Record> records = plugin.getRecordManager().getRecords(dungeon);
+		Record.useFinish = false;
 		Collections.sort(records);
 		records = RecordManager.removeDuplicatePlayers(records);
 
 		if(records.size() == 0){
-			player.sendMessage("Nobody has completed " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " yet.");
+			plugin.getMessenger().sendMessage(player, "Nobody has completed " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " yet.");
 			return;
 		}
 		
@@ -153,13 +156,68 @@ public class CommandManager {
 	}
 	
 	public void viewHistory(Player player, Player target, Dungeon dungeon){
-		// TODO Implement feature
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+		List<Record> records = plugin.getRecordManager().getRecords(dungeon, target.getUniqueId());
+		Record.useFinish = true;
+		Collections.sort(records);
+
+		if(records.size() == 0){
+			plugin.getMessenger().sendMessage(player, ChatColor.YELLOW + target.getName() + ChatColor.RESET + " hasn't completed " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " yet.");
+			return;
+		}
+		
+		int maxRecord = 10;
+		
+		if(records.size() < maxRecord)
+			maxRecord = records.size();
+		
+		List<String> messages = new ArrayList<String>();
+		messages.add("Last " + ChatColor.YELLOW + maxRecord + ChatColor.RESET + " records for " + ChatColor.YELLOW + target.getName() + ChatColor.RESET + " in " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + ":");
+		
+		for(int i = 0; i < maxRecord; i++){
+			String time = plugin.getFormatter().getShortFormatter().format(records.get(i).getTime());
+			String finishTime = plugin.getFormatter().getLongFormatter().format(records.get(i).getFinishTime());
+			
+			messages.add((i + 1) + ") " + ChatColor.YELLOW + time + ChatColor.RESET + " : " + finishTime);
+		}
+		
+		plugin.getMessenger().sendMessages(player, messages);
 	}
 	
 	public void viewDungeonHistory(Player player, Dungeon dungeon){
-		// TODO Implement feature
-		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
+		List<Record> records = plugin.getRecordManager().getRecords(dungeon);
+		Record.useFinish = true;
+		Collections.sort(records);
+		records = RecordManager.removeDuplicatePlayers(records);
+
+		if(records.size() == 0){
+			plugin.getMessenger().sendMessage(player, "Nobody has completed " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " yet.");
+			return;
+		}
+		
+		int maxRecord = 10;
+		
+		if(records.size() < maxRecord)
+			maxRecord = records.size();
+		
+		List<String> messages = new ArrayList<String>();
+		messages.add("Last " + ChatColor.YELLOW + maxRecord + ChatColor.RESET + " records for " + ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + ":");
+		
+		for(int i = 0; i < maxRecord; i++){
+			String time = plugin.getFormatter().getShortFormatter().format(records.get(i).getTime());
+			String targetName = "";
+			
+			Player target = Bukkit.getPlayer(records.get(i).getPlayer());
+			if(target == null)
+				targetName = Bukkit.getOfflinePlayer(records.get(i).getPlayer()).getName();
+			else
+				targetName = target.getName();
+			
+			String finishTime = plugin.getFormatter().getLongFormatter().format(records.get(i).getFinishTime());
+			
+			messages.add((i + 1) + ") " + ChatColor.YELLOW + targetName + ChatColor.RESET + " : " + time + " : " + finishTime);
+		}
+		
+		plugin.getMessenger().sendMessages(player, messages);
 	}
 	
 	public void viewPlayerHistory(Player player, Player target){

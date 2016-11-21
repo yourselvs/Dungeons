@@ -30,3 +30,5 @@ permissions:
         default: op
     dungeon.command:
         default: op
+    dungeon.checkpoint:
+        default: op

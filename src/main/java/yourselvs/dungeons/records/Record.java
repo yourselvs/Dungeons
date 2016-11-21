@@ -6,6 +6,8 @@ import java.util.UUID;
 import yourselvs.dungeons.dungeons.Dungeon;
 
 public class Record implements Comparable<Record>{
+	public static boolean useFinish = false;
+	
 	private UUID player;
 	private Dungeon dungeon;
 	private Date finishTime;
@@ -47,6 +49,9 @@ public class Record implements Comparable<Record>{
 
 	@Override
 	public int compareTo(Record record) {
-		return (int) (time.getTime() - record.time.getTime());
+		if(useFinish)
+			return (int) (finishTime.getTime() - record.finishTime.getTime());
+		else
+			return (int) (time.getTime() - record.time.getTime());
 	}
 }

@@ -2,6 +2,7 @@ package yourselvs.dungeons.commands;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -532,6 +533,38 @@ public class CommandParser{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
+	public void parseCheckpoint(Cmd command) {
+		// checkpoint [player]
+		
+		if(command.sender instanceof Player) {
+			plugin.getMessenger().sendMessage(command.sender, "You may not do this as a player.");
+			return;
+		}
+		
+		if(command.args.length < 2) {
+			plugin.getMessenger().sendMessage(command.sender, "You must include a player.");
+			return;
+		}
+		
+		Player player = Bukkit.getPlayer(command.args[1]);
+		
+		if(player == null) {
+			player = Bukkit.getOfflinePlayer(command.args[1]).getPlayer();
+
+			if(player == null) {
+				plugin.getMessenger().sendMessage(command.sender, "This player does not exist or is not online.");
+				return;
+			}
+		}
+		
+		if(plugin.getSessionManager().getSession(player) == null) {
+			plugin.getMessenger().sendMessage(command.sender, "This player isn't in a dungeon.");
+			return;
+		}
+		
+		plugin.getSessionManager().getSession(player).setCheckpoint(player.getLocation());
+	}
 	public void parseViewDungeon(Cmd command){
 		// view [dungeon]
 		
@@ -564,6 +597,15 @@ public class CommandParser{
 		}
 		else // If the user is not a player, send an uncolored message
 			plugin.getMessenger().sendMessage(command.sender, "The following command was not recognized: " + subcmd);
+	}
+	
+	public void parseNotInUse(Cmd command) {
+		if(command.sender instanceof Player){ // If the user is a player, send a colored message
+			Player player = (Player) command.sender; // Create a player by casting the sender
+			plugin.getMessenger().sendMessage(player, "You must be on the dungeons server to use this dungeon command.");
+		}
+		else // If the user is not a player, send an uncolored message
+			plugin.getMessenger().sendMessage(command.sender, "You must be on the dungeons server to use this dungeon command.");
 	}
 	
 	// Utility methods

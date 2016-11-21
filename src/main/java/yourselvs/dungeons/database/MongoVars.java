@@ -35,6 +35,7 @@ public class MongoVars {
 	public final String sessions = "sessions";
 	public final String version = "version";
 	public final String command = "command";
+	public final String checkpoint = "checkpoint";
 	
 	// Values
 	public final String allowedValue = "allowed";
@@ -47,6 +48,8 @@ public class MongoVars {
 	public final String itemType = "item";
 	public final String sessionType = "session";
 	public final String versionType = "version";
+	public final String checkpointType = "checkpoint";
+	public final String playerCheckpointType = "playercheckpoint";
 	
 	// Statuses
 	public final String completeStatus = "complete";

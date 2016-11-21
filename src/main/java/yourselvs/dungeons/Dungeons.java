@@ -46,6 +46,8 @@ public class Dungeons extends JavaPlugin
 	private DungeonListener dungeonListener;
 	private CommandListener commandListener;
 	
+	private boolean useDungeons;
+	
 	// TODO Add dungeons that can only be completed while in a vehicle
 	// TODO Add documentation to methods
 	// TODO Add maximum number of people in dungeon
@@ -58,6 +60,8 @@ public class Dungeons extends JavaPlugin
 	public void onEnable() {
     	saveDefaultConfig();
     	FileConfiguration config = getConfig();
+    	
+    	useDungeons = config.getBoolean("dungeons");
     	
     	String textUri = config.getString("textUri");
     	String dbName = config.getString("dbName");
@@ -109,6 +113,7 @@ public class Dungeons extends JavaPlugin
     public Messenger getMessenger() {return messenger;}
     public DungeonListener getDungeonListener() {return dungeonListener;}
     public CommandListener getCommandListener() {return commandListener;}
+    public boolean useDungeons() {return useDungeons;}
     
     @Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -128,10 +133,20 @@ public class Dungeons extends JavaPlugin
 				String subcmd = args[0];
 				
 				if(subcmd.equalsIgnoreCase("join")){
-					commandParser.parseJoin(cmd);
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseJoin(cmd);
+					}
 				}
 				else if(subcmd.equalsIgnoreCase("leave")){
-					commandParser.parseLeave(cmd);
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseLeave(cmd);
+					}
 				}
 				else if(subcmd.equalsIgnoreCase("list")){
 					new Thread(new Runnable() {
@@ -148,13 +163,28 @@ public class Dungeons extends JavaPlugin
 				    }).start();
 				}
 				else if(subcmd.equalsIgnoreCase("forcejoin")){
-					commandParser.parseForceJoin(cmd);
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseForceJoin(cmd);
+					}
 				}
 				else if(subcmd.equalsIgnoreCase("forceleave")){
-					commandParser.parseForceLeave(cmd);
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseForceLeave(cmd);
+					}
 				}
 				else if(subcmd.equalsIgnoreCase("complete")){
-					commandParser.parseComplete(cmd);
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseComplete(cmd);
+					}
 				}
 				else if(subcmd.equalsIgnoreCase("top")){
 					new Thread(new Runnable() {
@@ -206,10 +236,20 @@ public class Dungeons extends JavaPlugin
 				    }).start();
 				}
 				else if(subcmd.equalsIgnoreCase("create")){
-					commandParser.parseCreate(cmd);
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseCreate(cmd);
+					}
 				}
 				else if(subcmd.equalsIgnoreCase("delete")){
-					commandParser.parseDelete(cmd);
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseDelete(cmd);
+					}
 				}
 				else if(subcmd.equalsIgnoreCase("cmd") || subcmd.equalsIgnoreCase("command")){
 					new Thread(new Runnable() {
@@ -224,6 +264,14 @@ public class Dungeons extends JavaPlugin
 				        	commandParser.parseViewDungeon(cmd);
 				        }
 				    }).start();
+				}
+				else if(subcmd.equalsIgnoreCase("checkpoint")){
+					if(!useDungeons) {
+						commandParser.parseNotInUse(cmd);
+					}
+					else {
+						commandParser.parseCheckpoint(cmd);
+					}
 				}
 				else{
 					new Thread(new Runnable() {

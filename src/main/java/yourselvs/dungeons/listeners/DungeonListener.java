@@ -45,7 +45,7 @@ public class DungeonListener implements Listener {
 	
 	@EventHandler
 	public void onStartDungeon(PlayerStartDungeonEvent event) {
-		Session session = new Session(event.getPlayer().getUniqueId(), event.getDungeon(), event.getTime(), event.getPlayer().getLocation());
+		Session session = new Session(event.getPlayer().getUniqueId(), event.getDungeon(), event.getTime(), event.getPlayer().getLocation(), event.getDungeon().getStart());
 		plugin.getSessionManager().addSession(session);
 	}
 	
@@ -86,23 +86,11 @@ public class DungeonListener implements Listener {
 		plugin.getSessionManager().removeSession(event.getPlayer().getUniqueId());
 	}
 	
-	/*
-	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		Session session = plugin.getSessionManager().getSession(player);
-		if(session == null)
-			return;
-		player.teleport(session.getLocation());
-		plugin.getSessionManager().removeSession(player.getUniqueId());
-	}
-	*/
-	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerRespawnEvent event) {
 		Session session = plugin.getSessionManager().getSession(event.getPlayer());
 		if(session != null){
-			event.setRespawnLocation(session.getDungeon().getStart());
+			event.setRespawnLocation(session.getCheckpoint());
 		}
 	}
 	

@@ -53,15 +53,15 @@ public class MongoHandler implements IDatabase {
 	public void addDungeon(Dungeon dungeon) {
 		Document doc = new Document(v.type, v.dungeonType)
 				.append(v.name, dungeon.getName())
-				.append(v.world, dungeon.getStart().getWorld().getName())
+				.append(v.creator, dungeon.getCreator())
+				.append(v.difficulty, dungeon.getDifficulty().toString())
+				.append(v.timesCompleted, dungeon.getTimesCompleted())
 				.append(v.locX, dungeon.getStart().getX())
 				.append(v.locY, dungeon.getStart().getY())
 				.append(v.locZ, dungeon.getStart().getZ())
 				.append(v.yaw, (int) dungeon.getStart().getYaw())
 				.append(v.pitch, (int) dungeon.getStart().getPitch())
-				.append(v.creator, dungeon.getCreator())
-				.append(v.difficulty, dungeon.getDifficulty().toString())
-				.append(v.timesCompleted, dungeon.getTimesCompleted());
+				.append(v.world, dungeon.getStart().getWorld().getName());
 		db.insertDocument(doc);
 		
 		for(String command : dungeon.getCommandsAllowed())
@@ -107,6 +107,42 @@ public class MongoHandler implements IDatabase {
 	}
 	
 	@Override
+	public void setPlayerCheckpoint(UUID uuid, Location checkpoint) {
+		Document docToFind = new Document(v.type, v.playerCheckpointType)
+				.append(v.leastSignificantBits, uuid.getLeastSignificantBits())
+				.append(v.mostSignificantBits, uuid.getMostSignificantBits());
+		
+		Document doc = db.findDocument(docToFind);
+		
+		if(doc != null) {
+			db.deleteDocuments(docToFind);
+			return;
+		}
+		
+		docToFind.append(v.world, checkpoint.getWorld().getName())
+		.append(v.locX, checkpoint.getX())
+		.append(v.locY, checkpoint.getY())
+		.append(v.locZ, checkpoint.getZ())
+		.append(v.pitch, (int) checkpoint.getPitch())
+		.append(v.yaw, (int) checkpoint.getYaw());
+
+		db.insertDocument(docToFind);
+	}
+	
+	@Override
+	public void removePlayerCheckpoint(UUID uuid) {
+		Document docToFind = new Document(v.type, v.playerCheckpointType)
+				.append(v.leastSignificantBits, uuid.getLeastSignificantBits())
+				.append(v.mostSignificantBits, uuid.getMostSignificantBits());
+		
+		Document doc = db.findDocument(docToFind);
+		
+		if(doc != null) {
+			db.deleteDocuments(docToFind);
+		}
+	}
+	
+	@Override
 	public List<Session> getSessions() {
 		List<Session> sessions = new ArrayList<Session>();
 		Document docsToFind = new Document(v.type, v.sessionType);
@@ -117,15 +153,14 @@ public class MongoHandler implements IDatabase {
 			UUID uuid = new UUID(mostSigBits, leastSigBits);
 			Dungeon dungeon = plugin.getDungeonManager().getDungeon(doc.getString(v.dungeon));
 			Date start = new Date(doc.getLong(v.start));
-			World world = plugin.getServer().getWorld(doc.getString(v.world));
-			double x = doc.getDouble(v.locX);
-			double y = doc.getDouble(v.locY);
-			double z = doc.getDouble(v.locZ);
-			float yaw = doc.getInteger(v.yaw);
-			float pitch = doc.getInteger(v.pitch);
-			Location location = new Location(world, x, y, z, yaw, pitch);
+			Location location = buildLocation(doc);
+			Document sessionDocToFind = new Document(v.type, v.playerCheckpointType)
+					.append(v.leastSignificantBits, leastSigBits)
+					.append(v.mostSignificantBits, mostSigBits);
+			Document checkpointDoc = db.findDocument(sessionDocToFind);
+			Location checkpoint = buildLocation(checkpointDoc);
 			
-			sessions.add(new Session(uuid, dungeon, start, location));
+			sessions.add(new Session(uuid, dungeon, start, location, checkpoint));
 		}
 		return sessions;
 	}

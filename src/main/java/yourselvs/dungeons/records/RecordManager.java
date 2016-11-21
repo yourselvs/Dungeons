@@ -11,6 +11,8 @@ import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.dungeons.Dungeon;
 
 public class RecordManager {
+	
+	
 	private Dungeons plugin;
 	
 	private List<Record> records;
