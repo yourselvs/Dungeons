@@ -6,22 +6,39 @@ import java.util.Set;
 import org.bukkit.Location;
 
 public class Dungeon {
-	public enum Difficulty{EASY, MEDIUM, HARD, INSANE;
-
-	public static Difficulty parse(String string) {
-		if(string.equalsIgnoreCase("easy"))
-			return Difficulty.EASY;
-		if(string.equalsIgnoreCase("medium"))
-			return Difficulty.MEDIUM;
-		if(string.equalsIgnoreCase("hard"))
-			return Difficulty.HARD;
-		return Difficulty.INSANE;
-	}}
+	public enum Difficulty {
+		EASY, MEDIUM, HARD, INSANE;
+		
+		public static Difficulty parse(String string) {
+			if(string.equalsIgnoreCase("easy"))
+				return EASY;
+			if(string.equalsIgnoreCase("medium"))
+				return MEDIUM;
+			if(string.equalsIgnoreCase("hard"))
+				return HARD;
+			return INSANE;
+		}
+	}
+	
+	public enum Length {
+		SHORT, AVERAGE, LONG, MARATHON;
+		
+		public static Length parse(String string) {
+			if(string.equalsIgnoreCase("short"))
+				return SHORT;
+			if(string.equalsIgnoreCase("average"))
+				return AVERAGE;
+			if(string.equalsIgnoreCase("long"))
+				return LONG;
+			return MARATHON;
+		}
+	}
 	
 	private String name;
 	private Location start;
 	private String creator;
 	private Difficulty difficulty;
+	private Length length;
 	private int timesCompleted;
 	private Set<String> commandsAllowed;
 	
@@ -32,14 +49,16 @@ public class Dungeon {
 	 * @param reward2			A list of items the player gets as a reward.
 	 * @param creator			The creator of the dungeon.
 	 * @param difficulty		The difficulty of the dungeon.
+	 * @param length			The length of the dungeon.
 	 * @param timesCompleted2 
 	 * @param timesCompleted	The number of times the dungeon has been completed.
 	 */
-	public Dungeon(String name, Location start, String creator, Difficulty difficulty) {
+	public Dungeon(String name, Location start, String creator, Difficulty difficulty, Length length) {
 		this.name = name;
 		this.start = start;
 		this.creator = creator;
 		this.difficulty = difficulty;
+		this.length = length;
 		this.timesCompleted = 0;
 		commandsAllowed = new HashSet<String>();
 	}
@@ -51,14 +70,16 @@ public class Dungeon {
 	 * @param reward2			A list of items the player gets as a reward.
 	 * @param creator			The creator of the dungeon.
 	 * @param difficulty		The difficulty of the dungeon.
+	 * @param length			The length of the dungeon
 	 * @param timesCompleted2 
 	 * @param timesCompleted	The number of times the dungeon has been completed.
 	 */
-	public Dungeon(String name, Location start, String creator, Difficulty difficulty, int timesCompleted){
+	public Dungeon(String name, Location start, String creator, Difficulty difficulty, Length length, int timesCompleted){
 		this.name = name;
 		this.start = start;
 		this.creator = creator;
 		this.difficulty = difficulty;
+		this.length = length;
 		this.timesCompleted = timesCompleted;
 		commandsAllowed = new HashSet<String>();
 	}
@@ -67,6 +88,7 @@ public class Dungeon {
 	public Location getStart() {return start;}
 	public String getCreator() {return creator;}
 	public Difficulty getDifficulty() {return difficulty;}
+	public Length getLength() {return length;}
 	public int getTimesCompleted() {return timesCompleted;}
 	public Set<String> getCommandsAllowed() {return commandsAllowed;}
 	
@@ -74,6 +96,7 @@ public class Dungeon {
 	public void setStart(Location start) {this.start = start;}
 	public void setCreator(String creator) {this.creator = creator;}
 	public void setDifficulty(Difficulty difficulty) {this.difficulty = difficulty;}
+	public void setLength(Length length) {this.length = length;}
 	public void setTimesCompleted(int timesCompleted) {this.timesCompleted = timesCompleted;}
 	
 	public void addCommandAllowed(String command){commandsAllowed.add(command);}

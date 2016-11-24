@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.dungeons.Dungeon;
 import yourselvs.dungeons.dungeons.Dungeon.Difficulty;
+import yourselvs.dungeons.dungeons.Dungeon.Length;
 import yourselvs.dungeons.events.PlayerFinishDungeonEvent;
 import yourselvs.dungeons.events.PlayerLeaveDungeonEvent;
 import yourselvs.dungeons.events.PlayerStartDungeonEvent;
@@ -72,18 +73,29 @@ public class CommandManager {
 		msgs.add("Dungeons available:");
 		for(Dungeon dungeon : plugin.getDungeonManager().getDungeons()){
 			Difficulty difficulty = dungeon.getDifficulty();
+			Length length = dungeon.getLength();
 			
-			String color = "";
+			String difficultyColor = "";
 			if(difficulty == Difficulty.EASY)
-				color = "" + ChatColor.GREEN;
+				difficultyColor = "" + ChatColor.GREEN;
 			else if(difficulty == Difficulty.MEDIUM)
-				color = "" + ChatColor.GOLD;
+				difficultyColor = "" + ChatColor.GOLD;
 			else if(difficulty == Difficulty.HARD)
-				color = "" + ChatColor.RED;
+				difficultyColor = "" + ChatColor.RED;
 			else if(difficulty == Difficulty.INSANE)
-				color = "" + ChatColor.DARK_RED;
+				difficultyColor = "" + ChatColor.DARK_RED;
+			
+			String lengthColor = "";
+			if(length == Length.SHORT)
+				lengthColor = "" + ChatColor.GREEN;
+			else if(length == Length.AVERAGE)
+				lengthColor = "" + ChatColor.GOLD;
+			else if(length == Length.LONG)
+				lengthColor = "" + ChatColor.RED;
+			else if(length == Length.MARATHON)
+				lengthColor = "" + ChatColor.DARK_RED;
 				
-			msgs.add(ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " : " + color + dungeon.getDifficulty().toString() + ChatColor.RESET + " : Created by " + ChatColor.YELLOW + dungeon.getCreator());
+			msgs.add(ChatColor.YELLOW + dungeon.getName() + ChatColor.RESET + " : " + difficultyColor + dungeon.getDifficulty().toString() + ChatColor.RESET + " : " + lengthColor + dungeon.getLength().toString() + ChatColor.RESET + " : Created by " + ChatColor.YELLOW + dungeon.getCreator());
 		}
 		
 		msgs.add("" + ChatColor.RED + ChatColor.BOLD + "WARNING: " + ChatColor.RED + "Your inventory, armor, and potion effects are cleared upon joining a dungeon.");
@@ -261,8 +273,8 @@ public class CommandManager {
 		plugin.getMessenger().sendMessage(player, "This feature is not available yet.");
 	}
 	
-	public void createDungeon(Player player, String name, Difficulty difficulty, String creator){
-		Dungeon dungeon = new Dungeon(name, player.getLocation(), creator, difficulty);
+	public void createDungeon(Player player, String name, Difficulty difficulty, Length length, String creator){
+		Dungeon dungeon = new Dungeon(name, player.getLocation(), creator, difficulty, length);
 		dungeon.addCommandAllowed("dungeon leave");
 		plugin.getDungeonManager().addDungeon(dungeon);
 		plugin.getMessenger().sendMessage(player, "Dungeon created: " + ChatColor.YELLOW + name);
@@ -303,9 +315,20 @@ public class CommandManager {
 			difficulty = ChatColor.YELLOW + difficulty;
 		if(difficulty.equalsIgnoreCase("hard"))
 			difficulty = ChatColor.RED + difficulty;
-		if(difficulty.equalsIgnoreCase("insne"))
+		if(difficulty.equalsIgnoreCase("insane"))
 			difficulty = ChatColor.DARK_RED + difficulty;
 		messages.add("Difficulty: " + difficulty);
+		
+		String length = dungeon.getLength().toString();
+		if(length.equalsIgnoreCase("short"))
+			length = ChatColor.GREEN + length;
+		if(length.equalsIgnoreCase("average"))
+			length = ChatColor.YELLOW + length;
+		if(length.equalsIgnoreCase("long"))
+			length = ChatColor.RED + length;
+		if(length.equalsIgnoreCase("marathon"))
+			length = ChatColor.DARK_RED + length;
+		messages.add("Length: " + length);
 		
 		messages.add("Creator: " + dungeon.getCreator());
 		

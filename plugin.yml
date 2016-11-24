@@ -1,6 +1,6 @@
 main: yourselvs.dungeons.Dungeons
 name: Dungeons
-version: 2.0
+version: 2.1
 author: yourselvs
 description: A dungeon manager to allow servers to have timed dungeon courses.
 commands:

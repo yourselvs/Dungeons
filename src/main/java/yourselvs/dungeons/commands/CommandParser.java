@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.dungeons.Dungeon;
 import yourselvs.dungeons.dungeons.Dungeon.Difficulty;
+import yourselvs.dungeons.dungeons.Dungeon.Length;
 import yourselvs.dungeons.records.Record;
 import yourselvs.dungeons.sessions.Session;
 
@@ -444,15 +445,24 @@ public class CommandParser{
 			return;
 		}
 		Difficulty difficulty = Difficulty.parse(command.args[2]);
-		if(command.args.length < 4){ // Check if the user included a creator
+		if(command.args.length < 4){ // Check if the user included a length
+			plugin.getMessenger().sendMessage(command.sender, "You must include a length.");
+			return;
+		}
+		if(!isParsableLength(command.args[3])){ // Check if the the length is parsable
+			plugin.getMessenger().sendMessage(player, "Length not recognized: " + ChatColor.YELLOW + command.args[3]);
+			return;
+		}
+		Length length = Length.parse(command.args[3]);
+		if(command.args.length < 5){ // Check if the user included a creator
 			plugin.getMessenger().sendMessage(command.sender, "You must include a creator.");
 			return;
 		}
-		String creator = command.args[3];
-		for(int i = 4; i < command.args.length; i++)
+		String creator = command.args[4];
+		for(int i = 5; i < command.args.length; i++)
 			creator = creator + " " + command.args[i];
 		
-		plugin.getCommandManager().createDungeon(player, dungeon, difficulty, creator);
+		plugin.getCommandManager().createDungeon(player, dungeon, difficulty, length, creator);
 	}
 	
 	public void parseDelete(Cmd command){
@@ -641,6 +651,13 @@ public class CommandParser{
 	public boolean isParsableDifficulty(String input){
 		if(input.equalsIgnoreCase("easy") || input.equalsIgnoreCase("medium") ||
 				input.equalsIgnoreCase("hard") || input.equalsIgnoreCase("insane"))
+			return true;
+		return false;
+	}
+	
+	public boolean isParsableLength(String input){
+		if(input.equalsIgnoreCase("short") || input.equalsIgnoreCase("average") ||
+				input.equalsIgnoreCase("long") || input.equalsIgnoreCase("marathon"))
 			return true;
 		return false;
 	}

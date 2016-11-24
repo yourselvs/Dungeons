@@ -17,6 +17,7 @@ public class MongoVars {
 	public final String status = "status";
 	public final String world = "world";
 	public final String difficulty = "difficulty";
+	public final String length = "length";
 	public final String creator = "creator";
 	public final String startTime = "startTime";
 	public final String finishTime = "finishTime";
@@ -60,6 +61,12 @@ public class MongoVars {
 	public final String medium = "MEDIUM";
 	public final String hard = "HARD";
 	public final String insane = "INSANE";
+	
+	// Lengths
+	public final String shortLength = "short";
+	public final String average = "average";
+	public final String longLength = "long";
+	public final String marathon = "marathon";
 	
 	// Dungeon parameters
 	public final String canPickupItem = "canPickupItem";

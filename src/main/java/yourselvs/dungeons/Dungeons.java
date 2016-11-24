@@ -24,7 +24,7 @@ import yourselvs.dungeons.utils.Messenger;
 
 public class Dungeons extends JavaPlugin
 {
-	public final String version = "2.0";
+	public final String version = "2.1";
 	public final String creator = "yourselvs";
 	
 	private boolean dbConfigured = false;

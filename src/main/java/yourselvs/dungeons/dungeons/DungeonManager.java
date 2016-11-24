@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Location;
 import yourselvs.dungeons.Dungeons;
 import yourselvs.dungeons.dungeons.Dungeon.Difficulty;
+import yourselvs.dungeons.dungeons.Dungeon.Length;
 
 public class DungeonManager {
 	private Dungeons plugin;
@@ -91,8 +92,8 @@ public class DungeonManager {
 	 * @param difficulty		The difficulty of the dungeon.
 	 * @param timesCompleted	The number of times the dungeon has been completed.
 	 */
-	public Dungeon buildDungeon(String name, Location start, String creator, Difficulty difficulty){
-		Dungeon dungeon = new Dungeon(name, start, creator, difficulty);
+	public Dungeon buildDungeon(String name, Location start, String creator, Difficulty difficulty, Length length){
+		Dungeon dungeon = new Dungeon(name, start, creator, difficulty, length);
 		
 		return dungeon;
 	}

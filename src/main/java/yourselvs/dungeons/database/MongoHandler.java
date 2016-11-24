@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bson.Document;
 import org.bukkit.Location;
@@ -15,6 +16,7 @@ import yourselvs.dungeons.database.interfaces.IDatabase;
 import yourselvs.dungeons.database.interfaces.IMongo;
 import yourselvs.dungeons.dungeons.Dungeon;
 import yourselvs.dungeons.dungeons.Dungeon.Difficulty;
+import yourselvs.dungeons.dungeons.Dungeon.Length;
 import yourselvs.dungeons.records.Record;
 import yourselvs.dungeons.sessions.Session;
 
@@ -35,16 +37,28 @@ public class MongoHandler implements IDatabase {
 		Document docsToFind = new Document(v.type,v.dungeonType);
 		List<Document> dungeonDocs = db.findDocuments(docsToFind);
 		for(Document doc : dungeonDocs){
-			String name = doc.getString(v.name);
-			Location start = buildLocation(doc);
-			String creator = doc.getString(v.creator);
-			Difficulty difficulty = parseDifficulty(doc.getString(v.difficulty));
-			int timesCompleted = doc.getInteger(v.timesCompleted, 0);
-			Dungeon dungeon = new Dungeon(name, start, creator, difficulty, timesCompleted);
-			Set<String> commandsAllowed = getCommandsAllowed(name);
-			for(String command : commandsAllowed)
-				dungeon.addCommandAllowed(command);
-			dungeons.add(dungeon);
+			String name = null;
+			try {
+				name = doc.getString(v.name);
+				Location start = buildLocation(doc);
+				String creator = doc.getString(v.creator);
+				Difficulty difficulty = Difficulty.parse(doc.getString(v.difficulty));
+				Length length = Length.parse(doc.getString(v.length));
+				int timesCompleted = doc.getInteger(v.timesCompleted, 0);
+				Dungeon dungeon = new Dungeon(name, start, creator, difficulty, length, timesCompleted);
+				Set<String> commandsAllowed = getCommandsAllowed(name);
+				for(String command : commandsAllowed)
+					dungeon.addCommandAllowed(command);
+				dungeons.add(dungeon);
+			} catch(Exception e) {
+				e.printStackTrace();
+				if(name == null) {
+					plugin.getLogger().log(Level.SEVERE, "A dungeon failed to load from database. The name of the dungeon could not be read.");
+				}
+				else {
+					plugin.getLogger().log(Level.SEVERE, "A dungeon failed to load from database. The name of the dungeon is: \"" + name + "\"");
+				}
+			}
 		}
 		return dungeons;
 	}
@@ -55,6 +69,7 @@ public class MongoHandler implements IDatabase {
 				.append(v.name, dungeon.getName())
 				.append(v.creator, dungeon.getCreator())
 				.append(v.difficulty, dungeon.getDifficulty().toString())
+				.append(v.length, dungeon.getLength().toString())
 				.append(v.timesCompleted, dungeon.getTimesCompleted())
 				.append(v.locX, dungeon.getStart().getX())
 				.append(v.locY, dungeon.getStart().getY())
@@ -241,15 +256,5 @@ public class MongoHandler implements IDatabase {
 		float pitch = doc.getInteger(v.pitch);
 		Location loc = new Location(world, x, y, z, yaw, pitch);
 		return loc;
-	}
-	
-	private Difficulty parseDifficulty(String input){
-		if(input.equalsIgnoreCase(v.easy))
-			return Difficulty.EASY;
-		if(input.equalsIgnoreCase(v.medium))
-			return Difficulty.MEDIUM;
-		if(input.equalsIgnoreCase(v.hard))
-			return Difficulty.HARD;
-		return Difficulty.INSANE;	
 	}
 }
