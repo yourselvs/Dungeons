@@ -343,6 +343,10 @@ public class CommandManager {
 		plugin.getMessenger().sendMessages(player, messages);
 	}
 	
+	public void setPlayerCheckpoint(Player player) {
+		plugin.getSessionManager().getSession(player).setCheckpoint(player.getLocation());
+	}
+	
 	public void viewInfo(Player player){
 		plugin.getMessenger().sendMessage(player, "Dungeons plugin v" + ChatColor.YELLOW + plugin.version);
 		plugin.getMessenger().sendMessage(player, "Created by " + ChatColor.YELLOW + plugin.creator);

@@ -573,7 +573,7 @@ public class CommandParser{
 			return;
 		}
 		
-		plugin.getSessionManager().getSession(player).setCheckpoint(player.getLocation());
+		plugin.getCommandManager().setPlayerCheckpoint(player);
 	}
 	public void parseViewDungeon(Cmd command){
 		// view [dungeon]
