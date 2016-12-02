@@ -126,8 +126,10 @@ public class CommandManager {
 	public void completeDungeon(Player player, Session session){
 		PlayerFinishDungeonEvent event = new PlayerFinishDungeonEvent(session, new Date());
 		Bukkit.getServer().getPluginManager().callEvent(event);
-		if(!event.isCancelled())
+		if(!event.isCancelled()){
 			player.teleport(session.getLocation());
+			player.teleport(session.getLocation());
+		}
 	}
 	
 	public void viewTop(Player player, Dungeon dungeon){

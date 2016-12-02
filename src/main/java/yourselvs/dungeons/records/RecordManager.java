@@ -81,7 +81,11 @@ public class RecordManager {
 	
 	public Record getFastestRecord(Dungeon dungeon){
 		List<Record> records = getRecords(dungeon);
+		Record.useFinish = false;
 		Collections.sort(records);
+		if(records.isEmpty()) {
+			return null;
+		}
 		return records.get(0);
 	}
 	
